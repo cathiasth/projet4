@@ -1,0 +1,19 @@
+
+{
+    "name": "heleny/projet4",
+    "description": "Projet 4 de la formation Openclassrooms DWJ",
+    "authors": [
+        {
+            "name": "Cathia",
+            "email": "cathiasth@users.noreply.github.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\model\\": "model/",
+            "App\\controller\\": "controller/"
+            
+        }
+    },
+    "require": {}
+}
