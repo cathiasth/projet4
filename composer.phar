@@ -1,0 +1,1839 @@
+#!/usr/bin/env php
+<?php
+/*
+ * This file is part of Composer.
+ *
+ * (c) Nils Adermann <naderman@naderman.de>
+ *     Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * For the full copyright and license information, please view
+ * the license that is located at the bottom of this file.
+ */
+
+// Avoid APC causing random fatal errors per https://github.com/composer/composer/issues/264
+if (extension_loaded('apc') && filter_var(ini_get('apc.enable_cli'), FILTER_VALIDATE_BOOLEAN) && filter_var(ini_get('apc.cache_by_default'), FILTER_VALIDATE_BOOLEAN)) {
+    if (version_compare(phpversion('apc'), '3.0.12', '>=')) {
+        ini_set('apc.cache_by_default', 0);
+    } else {
+        fwrite(STDERR, 'Warning: APC <= 3.0.12 may cause fatal errors when running composer commands.'.PHP_EOL);
+        fwrite(STDERR, 'Update APC, or set apc.enable_cli or apc.cache_by_default to 0 in your php.ini.'.PHP_EOL);
+    }
+}
+
+Phar::mapPhar('composer.phar');
+require 'phar://composer.phar/bin/composer';
+
+__HALT_COMPILER(); ?>
+-��
+composer.phar+src/Composer/Autoload/AutoloadGenerator.php�i���_�i�6��+src/Composer/Autoload/ClassMapGenerator.php����_�Ӗ�5�src/Composer/Cache.php����_�[27�%src/Composer/Command/AboutCommand.php����_���;��'src/Composer/Command/ArchiveCommand.php����_����$src/Composer/Command/BaseCommand.php����_�g�1�.src/Composer/Command/BaseDependencyCommand.phpg���_g�Np�1src/Composer/Command/CheckPlatformReqsCommand.php���_��Ǥ*src/Composer/Command/ClearCacheCommand.php����_��I�&src/Composer/Command/ConfigCommand.php�Q���_�Qx���-src/Composer/Command/CreateProjectCommand.phpq;���_q;�����'src/Composer/Command/DependsCommand.php����_��e�(src/Composer/Command/DiagnoseCommand.php`P���_`P��^��,src/Composer/Command/DumpAutoloadCommand.php����_�� ]��$src/Composer/Command/ExecCommand.php 	���_ 	X?!��$src/Composer/Command/FundCommand.php,
+���_,
+9�&src/Composer/Command/GlobalCommand.php�	���_�	��E�$src/Composer/Command/HomeCommand.php���_qLB��$src/Composer/Command/InitCommand.phpWU���_WUL��"�'src/Composer/Command/InstallCommand.phpT���_T�����(src/Composer/Command/LicensesCommand.php����_����(src/Composer/Command/OutdatedCommand.php���_اc�)src/Composer/Command/ProhibitsCommand.php���__��S�&src/Composer/Command/RemoveCommand.php����_��1�&�'src/Composer/Command/RequireCommand.php�)���_�)^%�)src/Composer/Command/RunScriptCommand.php����_��ü�+src/Composer/Command/ScriptAliasCommand.php����_�?=Ѥ&src/Composer/Command/SearchCommand.phpU	���_U	���*src/Composer/Command/SelfUpdateCommand.php�C���_�C��n��$src/Composer/Command/ShowCommand.php�����_��O����&src/Composer/Command/StatusCommand.php,���_,��k�(src/Composer/Command/SuggestsCommand.php���_�Bɤ&src/Composer/Command/UpdateCommand.php�#���_�#3<&�(src/Composer/Command/ValidateCommand.phpk���_ky�8K�src/Composer/Composer.php���_?����src/Composer/Config.php%���_%���-src/Composer/Config/ConfigSourceInterface.php���_�[/�(src/Composer/Config/JsonConfigSource.php����_��\�-�$src/Composer/Console/Application.phpe8���_e8
+X��,src/Composer/Console/HtmlOutputFormatter.php3���_3ځEu�-src/Composer/DependencyResolver/Decisions.php6���_6����1src/Composer/DependencyResolver/DefaultPolicy.php���_��>#�/src/Composer/DependencyResolver/GenericRule.php����_�᫤�>src/Composer/DependencyResolver/Operation/InstallOperation.phpC���_C�\�*�Isrc/Composer/DependencyResolver/Operation/MarkAliasInstalledOperation.php����_������Ksrc/Composer/DependencyResolver/Operation/MarkAliasUninstalledOperation.php����_�3#��@src/Composer/DependencyResolver/Operation/OperationInterface.php����_���&�=src/Composer/DependencyResolver/Operation/SolverOperation.php����_�&�e
+�@src/Composer/DependencyResolver/Operation/UninstallOperation.phpI���_IF��ɤ=src/Composer/DependencyResolver/Operation/UpdateOperation.php'���_'Q�ɯ�3src/Composer/DependencyResolver/PolicyInterface.php����_���R�(src/Composer/DependencyResolver/Pool.php#���_#��C��+src/Composer/DependencyResolver/Problem.php����_�]D5�+src/Composer/DependencyResolver/Request.php����_��VP��(src/Composer/DependencyResolver/Rule.php?���_?�����1src/Composer/DependencyResolver/Rule2Literals.php���_tZ�ɤ+src/Composer/DependencyResolver/RuleSet.php�
+���_�
+_΂�4src/Composer/DependencyResolver/RuleSetGenerator.php����_�� ��3src/Composer/DependencyResolver/RuleSetIterator.php���_�C�$�2src/Composer/DependencyResolver/RuleWatchChain.phpi���_ih�,�2src/Composer/DependencyResolver/RuleWatchGraph.php����_��r�v�1src/Composer/DependencyResolver/RuleWatchNode.php���_�Gd7�*src/Composer/DependencyResolver/Solver.phpf:���_f:N�1��6src/Composer/DependencyResolver/SolverBugException.php����_�Xg6�;src/Composer/DependencyResolver/SolverProblemsException.php����_��|Ŧ�/src/Composer/DependencyResolver/Transaction.php����_�Vm쟤-src/Composer/Downloader/ArchiveDownloader.php�	���_�	G s0�1src/Composer/Downloader/ChangeReportInterface.php����_��ਿ�+src/Composer/Downloader/DownloadManager.php`���_`#�X�/src/Composer/Downloader/DownloaderInterface.php����_�gs!l�3src/Composer/Downloader/DvcsDownloaderInterface.php����_�&����*src/Composer/Downloader/FileDownloader.phpG���_G�OФ/src/Composer/Downloader/FilesystemException.php
+���_
+.-��,src/Composer/Downloader/FossilDownloader.php����_�܁Ii�)src/Composer/Downloader/GitDownloader.php�6���_�6�v0K�*src/Composer/Downloader/GzipDownloader.php����_�}�o¤(src/Composer/Downloader/HgDownloader.php����_��is̤*src/Composer/Downloader/PathDownloader.phpT���_T���0src/Composer/Downloader/PearPackageExtractor.phpu���_uz���.src/Composer/Downloader/PerforceDownloader.php����_����9�*src/Composer/Downloader/PharDownloader.php����_����)src/Composer/Downloader/RarDownloader.php����_�6	3U�)src/Composer/Downloader/SvnDownloader.phpM���_M!`�)src/Composer/Downloader/TarDownloader.php����_�͒X?�.src/Composer/Downloader/TransportException.php=���_=Z��ޤ9src/Composer/Downloader/VcsCapableDownloaderInterface.php����_�`����)src/Composer/Downloader/VcsDownloader.php����_�(	�>�(src/Composer/Downloader/XzDownloader.php����_�W$;�)src/Composer/Downloader/ZipDownloader.php����_���#s�&src/Composer/EventDispatcher/Event.php����_���j�0src/Composer/EventDispatcher/EventDispatcher.php7���_7��a��9src/Composer/EventDispatcher/EventSubscriberInterface.php����_�h�0�9src/Composer/EventDispatcher/ScriptExecutionException.phpv���_vwZ8S�)src/Composer/Exception/NoSslException.phpf���_f��M��src/Composer/Factory.php?>���_?>=�w��src/Composer/IO/BaseIO.php����_���A�src/Composer/IO/BufferIO.php����_�X~d�src/Composer/IO/ConsoleIO.php���_�w��src/Composer/IO/IOInterface.php����_�՝�src/Composer/IO/NullIO.php����_�F`sʤsrc/Composer/Installer.php�����_��8�д�*src/Composer/Installer/BinaryInstaller.php
+���_
+t�{��2src/Composer/Installer/BinaryPresenceInterface.php����_��5���.src/Composer/Installer/InstallationManager.php-���_-�}�7�)src/Composer/Installer/InstallerEvent.php���_l�zi�*src/Composer/Installer/InstallerEvents.php����_��@G�-src/Composer/Installer/InstallerInterface.php����_�^��ʤ+src/Composer/Installer/LibraryInstaller.php%���_%��̤/src/Composer/Installer/MetapackageInstaller.php����_��ti��(src/Composer/Installer/NoopInstaller.php+���_+��M}�'src/Composer/Installer/PackageEvent.phpe���_e;� �(src/Composer/Installer/PackageEvents.php����_�db�s�.src/Composer/Installer/PearBinaryInstaller.php����_�*�k�(src/Composer/Installer/PearInstaller.php����_�Ȃ�Ѥ*src/Composer/Installer/PluginInstaller.php����_�L�a:�+src/Composer/Installer/ProjectInstaller.php���_*0@P�4src/Composer/Installer/SuggestedPackagesReporter.php:���_:��UV�src/Composer/Json/JsonFile.phpL���_Lrs�#src/Composer/Json/JsonFormatter.phpb���_b�N��%src/Composer/Json/JsonManipulator.php�4���_�4ͮ��-src/Composer/Json/JsonValidationException.php\���_\.X�ܤ%src/Composer/Package/AliasPackage.php����_�-��&�7src/Composer/Package/Archiver/ArchivableFilesFilter.php	���_	yY+��7src/Composer/Package/Archiver/ArchivableFilesFinder.php����_�����0src/Composer/Package/Archiver/ArchiveManager.php����_��<�B�3src/Composer/Package/Archiver/ArchiverInterface.php���_�>�3src/Composer/Package/Archiver/BaseExcludeFilter.php����_�y�=Ƥ7src/Composer/Package/Archiver/ComposerExcludeFilter.php���_�SZ0�2src/Composer/Package/Archiver/GitExcludeFilter.phpr���_r3�Mh�1src/Composer/Package/Archiver/HgExcludeFilter.php���_
+��S�.src/Composer/Package/Archiver/PharArchiver.php?���_?��	u�-src/Composer/Package/Archiver/ZipArchiver.phpX���_X�k�~�$src/Composer/Package/BasePackage.php	���_	�&|'�*src/Composer/Package/Comparer/Comparer.php����_��fK}�(src/Composer/Package/CompletePackage.php����_�p[֤1src/Composer/Package/CompletePackageInterface.php���_��>�+src/Composer/Package/Dumper/ArrayDumper.phpb���_bs����src/Composer/Package/Link.php����_��Y��7src/Composer/Package/LinkConstraint/EmptyConstraint.php����_��~��?src/Composer/Package/LinkConstraint/LinkConstraintInterface.phpd���_d��Ln�7src/Composer/Package/LinkConstraint/MultiConstraint.php����_��b`��:src/Composer/Package/LinkConstraint/SpecificConstraint.phpi���_iޔ�%�9src/Composer/Package/LinkConstraint/VersionConstraint.phpX���_X}`y�+src/Composer/Package/Loader/ArrayLoader.php����_�c
+@��7src/Composer/Package/Loader/InvalidPackageException.phpE���_Exb��*src/Composer/Package/Loader/JsonLoader.php����_�!~�{�/src/Composer/Package/Loader/LoaderInterface.php����_��}�Τ1src/Composer/Package/Loader/RootPackageLoader.phpj���_j[����5src/Composer/Package/Loader/ValidatingArrayLoader.php�A���_�A��e-�src/Composer/Package/Locker.php="���_="G�F+� src/Composer/Package/Package.php����_�cÏh�)src/Composer/Package/PackageInterface.php\���_\x�p��)src/Composer/Package/RootAliasPackage.php	���_		_���$src/Composer/Package/RootPackage.php���_��_�-src/Composer/Package/RootPackageInterface.php����_�"maV�/src/Composer/Package/Version/VersionGuesser.php�#���_�#mjVȤ.src/Composer/Package/Version/VersionParser.php����_����0src/Composer/Package/Version/VersionSelector.php����_��5�,�-src/Composer/Plugin/Capability/Capability.phpW���_W�_�1�2src/Composer/Plugin/Capability/CommandProvider.php����_��O�>�src/Composer/Plugin/Capable.php���_�q+�$src/Composer/Plugin/CommandEvent.php����_����W�$src/Composer/Plugin/PluginEvents.php����_��1=z�'src/Composer/Plugin/PluginInterface.php����_�)'*ؤ%src/Composer/Plugin/PluginManager.php�$���_�$m���*src/Composer/Plugin/PreCommandRunEvent.php����_�:�d�,src/Composer/Plugin/PreFileDownloadEvent.php`���_`9-Τ4src/Composer/Question/StrictConfirmationQuestion.php���_'.��+src/Composer/Repository/ArrayRepository.php����_�c�?�.src/Composer/Repository/ArtifactRepository.php����_�q9OS�*src/Composer/Repository/BaseRepository.php����_�����.src/Composer/Repository/ComposerRepository.phpLU���_LUP] �/src/Composer/Repository/CompositeRepository.php;���_;��S�;src/Composer/Repository/ConfigurableRepositoryInterface.php����_���_�0src/Composer/Repository/FilesystemRepository.phpp���_p#��4src/Composer/Repository/InstalledArrayRepository.php����_�/�~>�9src/Composer/Repository/InstalledFilesystemRepository.php����_�V
+�_�8src/Composer/Repository/InstalledRepositoryInterface.php����_��9p�6src/Composer/Repository/InvalidRepositoryException.phpn���_n��똤-src/Composer/Repository/PackageRepository.phpj���_j���̤*src/Composer/Repository/PathRepository.php����_�w�+�2src/Composer/Repository/Pear/BaseChannelReader.phpI���_Ic6��,src/Composer/Repository/Pear/ChannelInfo.php����_�:T*ɤ.src/Composer/Repository/Pear/ChannelReader.php����_�?�YT�4src/Composer/Repository/Pear/ChannelRest10Reader.php�	���_�	�����4src/Composer/Repository/Pear/ChannelRest11Reader.php&	���_&	�Ub�5src/Composer/Repository/Pear/DependencyConstraint.phpq���_q9=�/src/Composer/Repository/Pear/DependencyInfo.phpq���_qf�T�8src/Composer/Repository/Pear/PackageDependencyParser.php����_��$Li�,src/Composer/Repository/Pear/PackageInfo.php����_��
+��,src/Composer/Repository/Pear/ReleaseInfo.php����_�o��ä*src/Composer/Repository/PearRepository.php����_�)��}�.src/Composer/Repository/PlatformRepository.php;!���_;!��9�-src/Composer/Repository/RepositoryFactory.phpb���_b�{���/src/Composer/Repository/RepositoryInterface.php����_�����-src/Composer/Repository/RepositoryManager.phpM���_M<(;��7src/Composer/Repository/RepositorySecurityException.phpo���_opի��/src/Composer/Repository/Vcs/BitbucketDriver.php� ���_� n�v>�,src/Composer/Repository/Vcs/FossilDriver.php����_��Ck�2src/Composer/Repository/Vcs/GitBitbucketDriver.php����_����X�)src/Composer/Repository/Vcs/GitDriver.php:���_:��.p�,src/Composer/Repository/Vcs/GitHubDriver.php�4���_�4�,��,src/Composer/Repository/Vcs/GitLabDriver.php�*���_�*���Ф1src/Composer/Repository/Vcs/HgBitbucketDriver.php����_�@)�L�(src/Composer/Repository/Vcs/HgDriver.phpB���_B���.src/Composer/Repository/Vcs/PerforceDriver.php�	���_�	&�t٤)src/Composer/Repository/Vcs/SvnDriver.php����_��)src/Composer/Repository/Vcs/VcsDriver.php�
+���_�
+eׯ-�2src/Composer/Repository/Vcs/VcsDriverInterface.php����_��X[��)src/Composer/Repository/VcsRepository.php�-���_�-�2��1src/Composer/Repository/VersionCacheInterface.php����_�A?R�3src/Composer/Repository/WritableArrayRepository.php���_�G*�7src/Composer/Repository/WritableRepositoryInterface.php����_��/s�$src/Composer/Script/CommandEvent.phpW���_W�VZt�src/Composer/Script/Event.php����_�򝻤�$src/Composer/Script/PackageEvent.php����_����
+�$src/Composer/Script/ScriptEvents.phpP���_P���� src/Composer/SelfUpdate/Keys.php����_���N�$src/Composer/SelfUpdate/Versions.phpH���_HclB� src/Composer/Util/AuthHelper.php����_�>zx��src/Composer/Util/Bitbucket.php*���_*,L�k�$src/Composer/Util/ComposerMirror.php����_����ؤ%src/Composer/Util/ConfigValidator.php����_�v���"src/Composer/Util/ErrorHandler.php����_�O�rk� src/Composer/Util/Filesystem.phpm/���_m/����src/Composer/Util/Git.php�0���_�0'���src/Composer/Util/GitHub.php|
+���_|
+`0t��src/Composer/Util/GitLab.php����_��7���src/Composer/Util/Hg.php����_�L���src/Composer/Util/IniHelper.phph���_h;FP�$src/Composer/Util/NoProxyPattern.php|���_|�|��#src/Composer/Util/PackageSorter.php����_����Y�src/Composer/Util/Perforce.php�2���_�2�s&}�src/Composer/Util/Platform.php����_�s�f�%src/Composer/Util/ProcessExecutor.php$
+���_$
+�N��&src/Composer/Util/RemoteFilesystem.phpFr���_Fr��¤src/Composer/Util/Silencer.php����_��Vjf�!src/Composer/Util/SpdxLicense.php���_�7
+�*src/Composer/Util/StreamContextFactory.php���_CɅ��src/Composer/Util/Svn.php,���_,�
+�Ĥsrc/Composer/Util/TlsHelper.phpL
+���_L
+"i�src/Composer/Util/Url.php����_�3��ܤsrc/Composer/Util/Zip.php����_��Ϊ�src/Composer/XdebugHandler.php����_�z�f~�src/bootstrap.php����_�I}��%src/Composer/Autoload/ClassLoader.php�4���_�4�s�|�#res/composer-repository-schema.json����_��G��res/composer-schema.jsonM����_M�_Τ6vendor/composer/spdx-licenses/res/spdx-exceptions.json����_��4DC�4vendor/composer/spdx-licenses/res/spdx-licenses.json����_�ڼ��4vendor/symfony/console/Resources/bin/hiddeninput.exe$���_$���v�&vendor/symfony/console/Application.php=X���_=X� S��*vendor/symfony/console/Command/Command.php�"���_�"x�jդ.vendor/symfony/console/Command/HelpCommand.php����_���-:�.vendor/symfony/console/Command/ListCommand.phpZ���_Z�w`�(vendor/symfony/console/ConsoleEvents.php����_�R��e�<vendor/symfony/console/Descriptor/ApplicationDescription.php����_���5��0vendor/symfony/console/Descriptor/Descriptor.php����_��N��9vendor/symfony/console/Descriptor/DescriptorInterface.php����_��Q��4vendor/symfony/console/Descriptor/JsonDescriptor.php�
+���_�
+*��ɤ8vendor/symfony/console/Descriptor/MarkdownDescriptor.php����_���;ݤ4vendor/symfony/console/Descriptor/TextDescriptor.php����_���$�3vendor/symfony/console/Descriptor/XmlDescriptor.php���_b{<�4vendor/symfony/console/Event/ConsoleCommandEvent.php����_�!Ȥ-vendor/symfony/console/Event/ConsoleEvent.php����_��x�\�6vendor/symfony/console/Event/ConsoleExceptionEvent.php���_�2�6vendor/symfony/console/Event/ConsoleTerminateEvent.phpz���_z�,�L�=vendor/symfony/console/Exception/CommandNotFoundException.php����_��� L�7vendor/symfony/console/Exception/ExceptionInterface.phpf���_f�AB��=vendor/symfony/console/Exception/InvalidArgumentException.php����_��̽Z�;vendor/symfony/console/Exception/InvalidOptionException.php����_���H�3vendor/symfony/console/Exception/LogicException.php����_��O\e�5vendor/symfony/console/Exception/RuntimeException.php����_���,6�4vendor/symfony/console/Formatter/OutputFormatter.php6���_6?=��=vendor/symfony/console/Formatter/OutputFormatterInterface.php����_������9vendor/symfony/console/Formatter/OutputFormatterStyle.phpF���_F𦴤Bvendor/symfony/console/Formatter/OutputFormatterStyleInterface.php����_���G�>vendor/symfony/console/Formatter/OutputFormatterStyleStack.php@���_@G��U�6vendor/symfony/console/Helper/DebugFormatterHelper.phpy���_y�8�Ф2vendor/symfony/console/Helper/DescriptorHelper.phpw���_w|�C�.vendor/symfony/console/Helper/DialogHelper.php���_���_�1vendor/symfony/console/Helper/FormatterHelper.phpd���_d��,��(vendor/symfony/console/Helper/Helper.php����_�!����1vendor/symfony/console/Helper/HelperInterface.php����_����+vendor/symfony/console/Helper/HelperSet.php����_���W"�2vendor/symfony/console/Helper/InputAwareHelper.phpc���_c����/vendor/symfony/console/Helper/ProcessHelper.php�	���_�	�w�R�-vendor/symfony/console/Helper/ProgressBar.phpl%���_l% d�ۤ0vendor/symfony/console/Helper/ProgressHelper.php]���_]���X�3vendor/symfony/console/Helper/ProgressIndicator.phpN���_N���l�0vendor/symfony/console/Helper/QuestionHelper.phpl���_lNt�7vendor/symfony/console/Helper/SymfonyQuestionHelper.php�
+���_�
+-��'vendor/symfony/console/Helper/Table.php�*���_�*���T�+vendor/symfony/console/Helper/TableCell.php����_��V^�-vendor/symfony/console/Helper/TableHelper.php���_�u���0vendor/symfony/console/Helper/TableSeparator.php����_�az�,vendor/symfony/console/Helper/TableStyle.php 
+���_ 
+_�I"�*vendor/symfony/console/Input/ArgvInput.php���_�����+vendor/symfony/console/Input/ArrayInput.php)���_)��C�&vendor/symfony/console/Input/Input.php����_�f�?�.vendor/symfony/console/Input/InputArgument.php���_D
+��4vendor/symfony/console/Input/InputAwareInterface.php����_��O��0vendor/symfony/console/Input/InputDefinition.php����_��U)��/vendor/symfony/console/Input/InputInterface.php����_��B�'�,vendor/symfony/console/Input/InputOption.php���_\��=�,vendor/symfony/console/Input/StringInput.php����_���
+�vendor/symfony/console/LICENSE)���_)NUN��/vendor/symfony/console/Logger/ConsoleLogger.php0	���_0	��
+��0vendor/symfony/console/Output/BufferedOutput.php_���__��>P�/vendor/symfony/console/Output/ConsoleOutput.php����_�n�!f�8vendor/symfony/console/Output/ConsoleOutputInterface.php����_����ʤ,vendor/symfony/console/Output/NullOutput.php����_����Z�(vendor/symfony/console/Output/Output.php�	���_�	0p�1vendor/symfony/console/Output/OutputInterface.php���_�&�.vendor/symfony/console/Output/StreamOutput.php����_�ĒO�2vendor/symfony/console/Question/ChoiceQuestion.phpx
+���_x
+W�!�8vendor/symfony/console/Question/ConfirmationQuestion.php����_�/ԏ�,vendor/symfony/console/Question/Question.php�	���_�	lF� vendor/symfony/console/Shell.php����_��X�A�,vendor/symfony/console/Style/OutputStyle.php\���_\wפ�/vendor/symfony/console/Style/StyleInterface.php����_�&n�Ѥ-vendor/symfony/console/Style/SymfonyStyle.php����_��� (�3vendor/symfony/console/Tester/ApplicationTester.php����_�s�9i�/vendor/symfony/console/Tester/CommandTester.php����_��Kz�(vendor/symfony/debug/BufferingLogger.phpt���_t=hܤvendor/symfony/debug/Debug.php,���_,�~�.�)vendor/symfony/debug/DebugClassLoader.php����_�1rEӤ%vendor/symfony/debug/ErrorHandler.phpH���_H�:D#�9vendor/symfony/debug/Exception/ClassNotFoundException.php����_�i����8vendor/symfony/debug/Exception/ContextErrorException.php����_�-
+d2�1vendor/symfony/debug/Exception/DummyException.php���_�+��6vendor/symfony/debug/Exception/FatalErrorException.php���_�Ĥ6vendor/symfony/debug/Exception/FatalThrowableError.phpW���_W?��K�3vendor/symfony/debug/Exception/FlattenException.php����_�פ7vendor/symfony/debug/Exception/OutOfMemoryException.php~���_~�o�=vendor/symfony/debug/Exception/UndefinedFunctionException.php����_���J��;vendor/symfony/debug/Exception/UndefinedMethodException.php����_�n��ؤ)vendor/symfony/debug/ExceptionHandler.php)3���_)3�h5=�Ivendor/symfony/debug/FatalErrorHandler/ClassNotFoundFatalErrorHandler.phpA���_AϤ�l�Evendor/symfony/debug/FatalErrorHandler/FatalErrorHandlerInterface.php���_ĹBV�Mvendor/symfony/debug/FatalErrorHandler/UndefinedFunctionFatalErrorHandler.phpx���_x~�"�Kvendor/symfony/debug/FatalErrorHandler/UndefinedMethodFatalErrorHandler.phpO���_O���*�vendor/symfony/debug/LICENSE)���_)NUN��:vendor/symfony/filesystem/Exception/ExceptionInterface.phpi���_i$ ���=vendor/symfony/filesystem/Exception/FileNotFoundException.php����_�p�\��3vendor/symfony/filesystem/Exception/IOException.php����_���#Ѥ<vendor/symfony/filesystem/Exception/IOExceptionInterface.php����_�j�wM�(vendor/symfony/filesystem/Filesystem.phpc4���_c4��@��!vendor/symfony/filesystem/LICENSE)���_)NUN��)vendor/symfony/filesystem/LockHandler.php����_��Z�1�1vendor/symfony/finder/Adapter/AbstractAdapter.php\���_\h�B�5vendor/symfony/finder/Adapter/AbstractFindAdapter.php����_�HC�/�2vendor/symfony/finder/Adapter/AdapterInterface.php����_�M��0vendor/symfony/finder/Adapter/BsdFindAdapter.php3���_375$��0vendor/symfony/finder/Adapter/GnuFindAdapter.php���_�`]�,vendor/symfony/finder/Adapter/PhpAdapter.php����_��d�;�/vendor/symfony/finder/Comparator/Comparator.php����_������3vendor/symfony/finder/Comparator/DateComparator.php#���_#�Τ5vendor/symfony/finder/Comparator/NumberComparator.php|���_|IT�ͤ9vendor/symfony/finder/Exception/AccessDeniedException.php����_���s��;vendor/symfony/finder/Exception/AdapterFailureException.php����_�wR�6vendor/symfony/finder/Exception/ExceptionInterface.php����_�Gz-�Avendor/symfony/finder/Exception/OperationNotPermitedException.php)���_)x�e�@vendor/symfony/finder/Exception/ShellCommandFailureException.php����_�����/vendor/symfony/finder/Expression/Expression.php���_i�:Ť)vendor/symfony/finder/Expression/Glob.phpf���_fD�cj�*vendor/symfony/finder/Expression/Regex.php���_�(�Ϥ3vendor/symfony/finder/Expression/ValueInterface.php����_�\p4�� vendor/symfony/finder/Finder.phpc.���_c.:�5g�vendor/symfony/finder/Glob.phpL���_Lj�9פ7vendor/symfony/finder/Iterator/CustomFilterIterator.php]���_]�o�Ƥ:vendor/symfony/finder/Iterator/DateRangeFilterIterator.phpx���_x�P�;vendor/symfony/finder/Iterator/DepthRangeFilterIterator.php����_��͝q�Avendor/symfony/finder/Iterator/ExcludeDirectoryFilterIterator.php����_�n�H�4vendor/symfony/finder/Iterator/FilePathsIterator.php#���_#G?T��9vendor/symfony/finder/Iterator/FileTypeFilterIterator.phpZ���_Z(&��<vendor/symfony/finder/Iterator/FilecontentFilterIterator.php5���_5���9vendor/symfony/finder/Iterator/FilenameFilterIterator.phpr���_rtu�1vendor/symfony/finder/Iterator/FilterIterator.php����_��+�ޤ=vendor/symfony/finder/Iterator/MultiplePcreFilterIterator.php-���_-���_�5vendor/symfony/finder/Iterator/PathFilterIterator.php����_��c�=vendor/symfony/finder/Iterator/RecursiveDirectoryIterator.php	���_	�]���:vendor/symfony/finder/Iterator/SizeRangeFilterIterator.phpe���_e����3vendor/symfony/finder/Iterator/SortableIterator.php+���_+��� �vendor/symfony/finder/LICENSE)���_)NUN��'vendor/symfony/finder/Shell/Command.php>���_>_~u�%vendor/symfony/finder/Shell/Shell.phpr���_r�pN�%vendor/symfony/finder/SplFileInfo.php���_����'vendor/symfony/polyfill-ctype/Ctype.phpH	���_H	���ݤ%vendor/symfony/polyfill-ctype/LICENSE)���_)�`e0�+vendor/symfony/polyfill-ctype/bootstrap.php����_��o��(vendor/symfony/polyfill-mbstring/LICENSE)���_)�\��-vendor/symfony/polyfill-mbstring/Mbstring.php�G���_�Gɖз�@vendor/symfony/polyfill-mbstring/Resources/unidata/lowerCase.php�T���_�T�2�?�Fvendor/symfony/polyfill-mbstring/Resources/unidata/titleCaseRegexp.php����_��y_��@vendor/symfony/polyfill-mbstring/Resources/unidata/upperCase.php�U���_�U`�8Q�.vendor/symfony/polyfill-mbstring/bootstrap.php)���_)p�B�7vendor/symfony/process/Exception/ExceptionInterface.phpf���_f]�>T�=vendor/symfony/process/Exception/InvalidArgumentException.php����_���+_�3vendor/symfony/process/Exception/LogicException.php����_� ���;vendor/symfony/process/Exception/ProcessFailedException.phpx���_x��zy�=vendor/symfony/process/Exception/ProcessTimedOutException.php���_���5vendor/symfony/process/Exception/RuntimeException.php����_���:�+vendor/symfony/process/ExecutableFinder.php����_��us��vendor/symfony/process/LICENSE)���_)NUN��.vendor/symfony/process/PhpExecutableFinder.php����_��%h�%vendor/symfony/process/PhpProcess.php����_��j���.vendor/symfony/process/Pipes/AbstractPipes.php����_����/vendor/symfony/process/Pipes/PipesInterface.phpD���_Dv�*vendor/symfony/process/Pipes/UnixPipes.php>���_>��ir�-vendor/symfony/process/Pipes/WindowsPipes.phpp���_p�U~ɤ"vendor/symfony/process/Process.php�R���_�R�`դ)vendor/symfony/process/ProcessBuilder.php�
+���_�
+�M��'vendor/symfony/process/ProcessUtils.phpQ���_Qb-$m�vendor/seld/jsonlint/LICENSE"���_"a�sy�@vendor/seld/jsonlint/src/Seld/JsonLint/DuplicateKeyException.phpk���_kZ��ä5vendor/seld/jsonlint/src/Seld/JsonLint/JsonParser.phpU2���_U2�s.Ƥ0vendor/seld/jsonlint/src/Seld/JsonLint/Lexer.php#���_#��@,�;vendor/seld/jsonlint/src/Seld/JsonLint/ParsingException.php%���_%`a�|�4vendor/seld/jsonlint/src/Seld/JsonLint/Undefined.php>���_>�q���(vendor/justinrainbow/json-schema/LICENSE ���_ ����.vendor/justinrainbow/json-schema/demo/demo.php����_�fC�Nvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/BaseConstraint.php�	���_�	�w�l�Tvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/CollectionConstraint.php�
+���_�
+��ӯ�Jvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/Constraint.php�
+���_�
+�V��Svendor/justinrainbow/json-schema/src/JsonSchema/Constraints/ConstraintInterface.php����_�� Q��Nvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/EnumConstraint.php]���_]V�U<�Gvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/Factory.php����_��0;�Pvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/FormatConstraint.php����_��T�ڤPvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/NumberConstraint.php�	���_�	�(�Pvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/ObjectConstraint.php����_��żx�Pvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/SchemaConstraint.php0	���_0	�j���Pvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/StringConstraint.php���_�w���Xvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/TypeCheck/LooseTypeCheck.phpa���_a	qäYvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/TypeCheck/StrictTypeCheck.php����_�4~���\vendor/justinrainbow/json-schema/src/JsonSchema/Constraints/TypeCheck/TypeCheckInterface.php����_���+j�Nvendor/justinrainbow/json-schema/src/JsonSchema/Constraints/TypeConstraint.php&���_&4��T�Svendor/justinrainbow/json-schema/src/JsonSchema/Constraints/UndefinedConstraint.phpS"���_S"���:�Fvendor/justinrainbow/json-schema/src/JsonSchema/Entity/JsonPointer.php����_�{N��Pvendor/justinrainbow/json-schema/src/JsonSchema/Exception/ExceptionInterface.phpI���_I%|��Vvendor/justinrainbow/json-schema/src/JsonSchema/Exception/InvalidArgumentException.php����_���G�Tvendor/justinrainbow/json-schema/src/JsonSchema/Exception/InvalidConfigException.phpl���_lA!LפTvendor/justinrainbow/json-schema/src/JsonSchema/Exception/InvalidSchemaException.phpl���_l�2���]vendor/justinrainbow/json-schema/src/JsonSchema/Exception/InvalidSchemaMediaTypeException.phpu���_u=h��Wvendor/justinrainbow/json-schema/src/JsonSchema/Exception/InvalidSourceUriException.phpw���_wN-�[�Svendor/justinrainbow/json-schema/src/JsonSchema/Exception/JsonDecodingException.php����_�\�
+�Wvendor/justinrainbow/json-schema/src/JsonSchema/Exception/ResourceNotFoundException.phpo���_op����Nvendor/justinrainbow/json-schema/src/JsonSchema/Exception/RuntimeException.php����_�%���^vendor/justinrainbow/json-schema/src/JsonSchema/Exception/UnresolvableJsonPointerException.php����_�u-#1�Rvendor/justinrainbow/json-schema/src/JsonSchema/Exception/UriResolverException.phpj���_j�>��Qvendor/justinrainbow/json-schema/src/JsonSchema/Exception/ValidationException.phpf���_f�����Kvendor/justinrainbow/json-schema/src/JsonSchema/Iterator/ObjectIterator.php����_�M����;vendor/justinrainbow/json-schema/src/JsonSchema/Rfc3339.php����_�f4���Avendor/justinrainbow/json-schema/src/JsonSchema/SchemaStorage.php�
+���_�
+�fO�Jvendor/justinrainbow/json-schema/src/JsonSchema/SchemaStorageInterface.php���_o�+}�Tvendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/AbstractRetriever.php����_�[�A��Gvendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/Curl.php����_�ԧLb�Rvendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/FileGetContents.php%���_%5"��Rvendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/PredefinedArray.php,���_,1�5��Xvendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/UriRetrieverInterface.php����_�����Cvendor/justinrainbow/json-schema/src/JsonSchema/Uri/UriResolver.php���_��)�Dvendor/justinrainbow/json-schema/src/JsonSchema/Uri/UriRetriever.phpF���_F�IaD�Hvendor/justinrainbow/json-schema/src/JsonSchema/UriResolverInterface.php����_�J��Ivendor/justinrainbow/json-schema/src/JsonSchema/UriRetrieverInterface.php����_���e�=vendor/justinrainbow/json-schema/src/JsonSchema/Validator.phpv���_v��g�%vendor/composer/spdx-licenses/LICENSE���_Bh��2vendor/composer/spdx-licenses/src/SpdxLicenses.phpH���_H͉T�vendor/composer/semver/LICENSE���_Bh��)vendor/composer/semver/src/Comparator.php���_wl��<vendor/composer/semver/src/Constraint/AbstractConstraint.php����_�խw-�4vendor/composer/semver/src/Constraint/Constraint.php����_�I&�=vendor/composer/semver/src/Constraint/ConstraintInterface.php����_�0C,��9vendor/composer/semver/src/Constraint/EmptyConstraint.php����_������9vendor/composer/semver/src/Constraint/MultiConstraint.php,���_,0�=�%vendor/composer/semver/src/Semver.php����_�?nݤ,vendor/composer/semver/src/VersionParser.php�-���_�-&\D̤!vendor/composer/ca-bundle/LICENSE���_*!^`�*vendor/composer/ca-bundle/src/CaBundle.phpR���_R!�%�&vendor/composer/xdebug-handler/LICENSE)���_)#�;^�0vendor/composer/xdebug-handler/src/PhpConfig.php����_�*D��.vendor/composer/xdebug-handler/src/Process.phpp	���_p	i,i��-vendor/composer/xdebug-handler/src/Status.php
+���_
+$�v-�4vendor/composer/xdebug-handler/src/XdebugHandler.php#���_#��B�vendor/psr/log/LICENSE=���_=p��O�)vendor/psr/log/Psr/Log/AbstractLogger.php;���_;�>3[�3vendor/psr/log/Psr/Log/InvalidArgumentException.php`���_` �X1�#vendor/psr/log/Psr/Log/LogLevel.php����_�j��8�/vendor/psr/log/Psr/Log/LoggerAwareInterface.php|���_|$���+vendor/psr/log/Psr/Log/LoggerAwareTrait.php����_�T��B�*vendor/psr/log/Psr/Log/LoggerInterface.php����_��x�&vendor/psr/log/Psr/Log/LoggerTrait.phpk���_k�}���%vendor/psr/log/Psr/Log/NullLogger.php����_��Di��)vendor/psr/log/Psr/Log/Test/DummyTest.phpp���_p��3vendor/psr/log/Psr/Log/Test/LoggerInterfaceTest.php 
+���_ 
+$/Ҥ*vendor/psr/log/Psr/Log/Test/TestLogger.php<���_<�(�I�vendor/autoload.php����_�k��'vendor/composer/autoload_namespaces.phpd���_dZ��H�!vendor/composer/autoload_psr4.php����_��*��%vendor/composer/autoload_classmap.phpd���_dZ��H�"vendor/composer/autoload_files.php���_����!vendor/composer/autoload_real.phpL���_L���#vendor/composer/autoload_static.php�
+���_�
+���=�vendor/composer/ClassLoader.php����_��J1�(vendor/composer/ca-bundle/res/cacert.pem�c���_�c9���bin/composer����_��4K�LICENSE.���_. ��<?php
+
+
+
+
+
+
+
+
+
+
+
+namespace Composer\Autoload;
+
+use Composer\Config;
+use Composer\EventDispatcher\EventDispatcher;
+use Composer\Installer\InstallationManager;
+use Composer\IO\IOInterface;
+use Composer\Package\AliasPackage;
+use Composer\Package\PackageInterface;
+use Composer\Repository\InstalledRepositoryInterface;
+use Composer\Util\Filesystem;
+use Composer\Script\ScriptEvents;
+use Composer\Util\PackageSorter;
+
+
+
+
+
+class AutoloadGenerator
+{
+
+
+
+private $eventDispatcher;
+
+
+
+
+private $io;
+
+
+
+
+private $devMode = false;
+
+
+
+
+private $classMapAuthoritative = false;
+
+
+
+
+private $apcu = false;
+
+
+
+
+private $runScripts = false;
+
+public function __construct(EventDispatcher $eventDispatcher, IOInterface $io = null)
+{
+$this->eventDispatcher = $eventDispatcher;
+$this->io = $io;
+}
+
+public function setDevMode($devMode = true)
+{
+$this->devMode = (bool) $devMode;
+}
+
+
+
+
+
+
+
+public function setClassMapAuthoritative($classMapAuthoritative)
+{
+$this->classMapAuthoritative = (bool) $classMapAuthoritative;
+}
+
+
+
+
+
+
+public function setApcu($apcu)
+{
+$this->apcu = (bool) $apcu;
+}
+
+
+
+
+
+
+public function setRunScripts($runScripts = true)
+{
+$this->runScripts = (bool) $runScripts;
+}
+
+public function dump(Config $config, InstalledRepositoryInterface $localRepo, PackageInterface $mainPackage, InstallationManager $installationManager, $targetDir, $scanPsrPackages = false, $suffix = '')
+{
+if ($this->classMapAuthoritative) {
+
+ $scanPsrPackages = true;
+}
+if ($this->runScripts) {
+$this->eventDispatcher->dispatchScript(ScriptEvents::PRE_AUTOLOAD_DUMP, $this->devMode, array(), array(
+'optimize' => (bool) $scanPsrPackages,
+));
+}
+
+$filesystem = new Filesystem();
+$filesystem->ensureDirectoryExists($config->get('vendor-dir'));
+
+ 
+ 
+ $basePath = $filesystem->normalizePath(realpath(realpath(getcwd())));
+$vendorPath = $filesystem->normalizePath(realpath(realpath($config->get('vendor-dir'))));
+$useGlobalIncludePath = (bool) $config->get('use-include-path');
+$prependAutoloader = $config->get('prepend-autoloader') === false ? 'false' : 'true';
+$targetDir = $vendorPath.'/'.$targetDir;
+$filesystem->ensureDirectoryExists($targetDir);
+
+$vendorPathCode = $filesystem->findShortestPathCode(realpath($targetDir), $vendorPath, true);
+$vendorPathCode52 = str_replace('__DIR__', 'dirname(__FILE__)', $vendorPathCode);
+$vendorPathToTargetDirCode = $filesystem->findShortestPathCode($vendorPath, realpath($targetDir), true);
+
+$appBaseDirCode = $filesystem->findShortestPathCode($vendorPath, $basePath, true);
+$appBaseDirCode = str_replace('__DIR__', '$vendorDir', $appBaseDirCode);
+
+$namespacesFile = <<<EOF
+<?php
+// autoload_namespaces.php @generated by Composer
+\$vendorDir = $vendorPathCode52;
+\$baseDir = $appBaseDirCode;
+return array(
+EOF;
+
+$psr4File = <<<EOF
+<?php
+// autoload_psr4.php @generated by Composer
+\$vendorDir = $vendorPathCode52;
+\$baseDir = $appBaseDirCode;
+return array(
+EOF;
+
+
+ $packageMap = $this->buildPackageMap($installationManager, $mainPackage, $localRepo->getCanonicalPackages());
+$autoloads = $this->parseAutoloads($packageMap, $mainPackage, $this->devMode === false);
+
+
+ foreach ($autoloads['psr-0'] as $namespace => $paths) {
+$exportedPaths = array();
+foreach ($paths as $path) {
+$exportedPaths[] = $this->getPathCode($filesystem, $basePath, $vendorPath, $path);
+}
+$exportedPrefix = var_export($namespace, true);
+$namespacesFile .= "    $exportedPrefix => ";
+$namespacesFile .= "array(".implode(', ', $exportedPaths)."),\n";
+}
+$namespacesFile .= ");\n";
+
+
+ foreach ($autoloads['psr-4'] as $namespace => $paths) {
+$exportedPaths = array();
+foreach ($paths as $path) {
+$exportedPaths[] = $this->getPathCode($filesystem, $basePath, $vendorPath, $path);
+}
+$exportedPrefix = var_export($namespace, true);
+$psr4File .= "    $exportedPrefix => ";
+$psr4File .= "array(".implode(', ', $exportedPaths)."),\n";
+}
+$psr4File .= ");\n";
+
+$classmapFile = <<<EOF
+<?php
+// autoload_classmap.php @generated by Composer
+\$vendorDir = $vendorPathCode52;
+\$baseDir = $appBaseDirCode;
+return array(
+EOF;
+
+
+ $targetDirLoader = null;
+$mainAutoload = $mainPackage->getAutoload();
+if ($mainPackage->getTargetDir() && !empty($mainAutoload['psr-0'])) {
+$levels = substr_count($filesystem->normalizePath($mainPackage->getTargetDir()), '/') + 1;
+$prefixes = implode(', ', array_map(function ($prefix) {
+return var_export($prefix, true);
+}, array_keys($mainAutoload['psr-0'])));
+$baseDirFromTargetDirCode = $filesystem->findShortestPathCode($targetDir, $basePath, true);
+
+$targetDirLoader = <<<EOF
+    public static function autoload(\$class)
+    {
+        \$dir = $baseDirFromTargetDirCode . '/';
+        \$prefixes = array($prefixes);
+        foreach (\$prefixes as \$prefix) {
+            if (0 !== strpos(\$class, \$prefix)) {
+                continue;
+            }
+            \$path = \$dir . implode('/', array_slice(explode('\\\\', \$class), $levels)).'.php';
+            if (!\$path = stream_resolve_include_path(\$path)) {
+                return false;
+            }
+            require \$path;
+            return true;
+        }
+    }
+EOF;
+}
+
+$excluded = null;
+if (!empty($autoloads['exclude-from-classmap'])) {
+$excluded = '{(' . implode('|', $autoloads['exclude-from-classmap']) . ')}';
+}
+
+$classMap = array();
+$ambiguousClasses = array();
+$scannedFiles = array();
+foreach ($autoloads['classmap'] as $dir) {
+$classMap = $this->addClassMapCode($filesystem, $basePath, $vendorPath, $dir, $excluded, null, null, $classMap, $ambiguousClasses, $scannedFiles);
+}
+
+if ($scanPsrPackages) {
+$namespacesToScan = array();
+
+
+ foreach (array('psr-4', 'psr-0') as $psrType) {
+foreach ($autoloads[$psrType] as $namespace => $paths) {
+$namespacesToScan[$namespace][] = array('paths' => $paths, 'type' => $psrType);
+}
+}
+
+krsort($namespacesToScan);
+
+foreach ($namespacesToScan as $namespace => $groups) {
+foreach ($groups as $group) {
+foreach ($group['paths'] as $dir) {
+$dir = $filesystem->normalizePath($filesystem->isAbsolutePath($dir) ? $dir : $basePath.'/'.$dir);
+if (!is_dir($dir)) {
+continue;
+}
+
+$classMap = $this->addClassMapCode($filesystem, $basePath, $vendorPath, $dir, $excluded, $namespace, $group['type'], $classMap, $ambiguousClasses, $scannedFiles);
+}
+}
+}
+}
+
+foreach ($ambiguousClasses as $className => $ambigiousPaths) {
+$cleanPath = str_replace(array('$vendorDir . \'', '$baseDir . \'', "',\n"), array($vendorPath, $basePath, ''), $classMap[$className]);
+
+$this->io->writeError(
+'<warning>Warning: Ambiguous class resolution, "'.$className.'"'.
+' was found '. (count($ambigiousPaths) + 1) .'x: in "'.$cleanPath.'" and "'. implode('", "', $ambigiousPaths) .'", the first will be used.</warning>'
+);
+}
+
+ksort($classMap);
+foreach ($classMap as $class => $code) {
+$classmapFile .= '    '.var_export($class, true).' => '.$code;
+}
+$classmapFile .= ");\n";
+
+if (!$suffix) {
+if (!$config->get('autoloader-suffix') && is_readable($vendorPath.'/autoload.php')) {
+$content = file_get_contents($vendorPath.'/autoload.php');
+if (preg_match('{ComposerAutoloaderInit([^:\s]+)::}', $content, $match)) {
+$suffix = $match[1];
+}
+}
+
+if (!$suffix) {
+$suffix = $config->get('autoloader-suffix') ?: md5(uniqid('', true));
+}
+}
+
+$this->filePutContentsIfModified($targetDir.'/autoload_namespaces.php', $namespacesFile);
+$this->filePutContentsIfModified($targetDir.'/autoload_psr4.php', $psr4File);
+$this->filePutContentsIfModified($targetDir.'/autoload_classmap.php', $classmapFile);
+$includePathFilePath = $targetDir.'/include_paths.php';
+if ($includePathFileContents = $this->getIncludePathsFile($packageMap, $filesystem, $basePath, $vendorPath, $vendorPathCode52, $appBaseDirCode)) {
+$this->filePutContentsIfModified($includePathFilePath, $includePathFileContents);
+} elseif (file_exists($includePathFilePath)) {
+unlink($includePathFilePath);
+}
+$includeFilesFilePath = $targetDir.'/autoload_files.php';
+if ($includeFilesFileContents = $this->getIncludeFilesFile($autoloads['files'], $filesystem, $basePath, $vendorPath, $vendorPathCode52, $appBaseDirCode)) {
+$this->filePutContentsIfModified($includeFilesFilePath, $includeFilesFileContents);
+} elseif (file_exists($includeFilesFilePath)) {
+unlink($includeFilesFilePath);
+}
+$this->filePutContentsIfModified($targetDir.'/autoload_static.php', $this->getStaticFile($suffix, $targetDir, $vendorPath, $basePath, $staticPhpVersion));
+$this->filePutContentsIfModified($vendorPath.'/autoload.php', $this->getAutoloadFile($vendorPathToTargetDirCode, $suffix));
+$this->filePutContentsIfModified($targetDir.'/autoload_real.php', $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion));
+
+$this->safeCopy(__DIR__.'/ClassLoader.php', $targetDir.'/ClassLoader.php');
+$this->safeCopy(__DIR__.'/../../../LICENSE', $targetDir.'/LICENSE');
+
+if ($this->runScripts) {
+$this->eventDispatcher->dispatchScript(ScriptEvents::POST_AUTOLOAD_DUMP, $this->devMode, array(), array(
+'optimize' => (bool) $scanPsrPackages,
+));
+}
+
+return count($classMap);
+}
+
+private function filePutContentsIfModified($path, $content)
+{
+$currentContent = @file_get_contents($path);
+if (!$currentContent || ($currentContent != $content)) {
+return file_put_contents($path, $content);
+}
+
+return 0;
+}
+
+private function addClassMapCode($filesystem, $basePath, $vendorPath, $dir, $excluded, $namespaceFilter, $autoloadType, array $classMap, array &$ambiguousClasses, array &$scannedFiles)
+{
+foreach ($this->generateClassMap($dir, $excluded, $namespaceFilter, $autoloadType, true, $scannedFiles) as $class => $path) {
+$pathCode = $this->getPathCode($filesystem, $basePath, $vendorPath, $path).",\n";
+if (!isset($classMap[$class])) {
+$classMap[$class] = $pathCode;
+} elseif ($this->io && $classMap[$class] !== $pathCode && !preg_match('{/(test|fixture|example|stub)s?/}i', strtr($classMap[$class].' '.$path, '\\', '/'))) {
+$ambiguousClasses[$class][] = $path;
+}
+}
+
+return $classMap;
+}
+
+private function generateClassMap($dir, $excluded, $namespaceFilter, $autoloadType, $showAmbiguousWarning, array &$scannedFiles)
+{
+return ClassMapGenerator::createMap($dir, $excluded, $showAmbiguousWarning ? $this->io : null, $namespaceFilter, $autoloadType, $scannedFiles);
+}
+
+public function buildPackageMap(InstallationManager $installationManager, PackageInterface $mainPackage, array $packages)
+{
+
+ $packageMap = array(array($mainPackage, ''));
+
+foreach ($packages as $package) {
+if ($package instanceof AliasPackage) {
+continue;
+}
+$this->validatePackage($package);
+
+$packageMap[] = array(
+$package,
+$installationManager->getInstallPath($package),
+);
+}
+
+return $packageMap;
+}
+
+
+
+
+
+
+protected function validatePackage(PackageInterface $package)
+{
+$autoload = $package->getAutoload();
+if (!empty($autoload['psr-4']) && null !== $package->getTargetDir()) {
+$name = $package->getName();
+$package->getTargetDir();
+throw new \InvalidArgumentException("PSR-4 autoloading is incompatible with the target-dir property, remove the target-dir in package '$name'.");
+}
+if (!empty($autoload['psr-4'])) {
+foreach ($autoload['psr-4'] as $namespace => $dirs) {
+if ($namespace !== '' && '\\' !== substr($namespace, -1)) {
+throw new \InvalidArgumentException("psr-4 namespaces must end with a namespace separator, '$namespace' does not, use '$namespace\\'.");
+}
+}
+}
+}
+
+
+
+
+
+
+
+
+
+public function parseAutoloads(array $packageMap, PackageInterface $mainPackage, $filterOutRequireDevPackages = false)
+{
+$mainPackageMap = array_shift($packageMap);
+if ($filterOutRequireDevPackages) {
+$packageMap = $this->filterPackageMap($packageMap, $mainPackage);
+}
+$sortedPackageMap = $this->sortPackageMap($packageMap);
+$sortedPackageMap[] = $mainPackageMap;
+array_unshift($packageMap, $mainPackageMap);
+
+$psr0 = $this->parseAutoloadsType($packageMap, 'psr-0', $mainPackage);
+$psr4 = $this->parseAutoloadsType($packageMap, 'psr-4', $mainPackage);
+$classmap = $this->parseAutoloadsType(array_reverse($sortedPackageMap), 'classmap', $mainPackage);
+$files = $this->parseAutoloadsType($sortedPackageMap, 'files', $mainPackage);
+$exclude = $this->parseAutoloadsType($sortedPackageMap, 'exclude-from-classmap', $mainPackage);
+
+krsort($psr0);
+krsort($psr4);
+
+return array(
+'psr-0' => $psr0,
+'psr-4' => $psr4,
+'classmap' => $classmap,
+'files' => $files,
+'exclude-from-classmap' => $exclude,
+);
+}
+
+
+
+
+
+
+
+public function createLoader(array $autoloads)
+{
+$loader = new ClassLoader();
+
+if (isset($autoloads['psr-0'])) {
+foreach ($autoloads['psr-0'] as $namespace => $path) {
+$loader->add($namespace, $path);
+}
+}
+
+if (isset($autoloads['psr-4'])) {
+foreach ($autoloads['psr-4'] as $namespace => $path) {
+$loader->addPsr4($namespace, $path);
+}
+}
+
+if (isset($autoloads['classmap'])) {
+$excluded = null;
+if (!empty($autoloads['exclude-from-classmap'])) {
+$excluded = '{(' . implode('|', $autoloads['exclude-from-classmap']) . ')}';
+}
+
+$scannedFiles = array();
+foreach ($autoloads['classmap'] as $dir) {
+try {
+$loader->addClassMap($this->generateClassMap($dir, $excluded, null, null, false, $scannedFiles));
+} catch (\RuntimeException $e) {
+$this->io->writeError('<warning>'.$e->getMessage().'</warning>');
+}
+}
+}
+
+return $loader;
+}
+
+protected function getIncludePathsFile(array $packageMap, Filesystem $filesystem, $basePath, $vendorPath, $vendorPathCode, $appBaseDirCode)
+{
+$includePaths = array();
+
+foreach ($packageMap as $item) {
+list($package, $installPath) = $item;
+
+if (null !== $package->getTargetDir() && strlen($package->getTargetDir()) > 0) {
+$installPath = substr($installPath, 0, -strlen('/'.$package->getTargetDir()));
+}
+
+foreach ($package->getIncludePaths() as $includePath) {
+$includePath = trim($includePath, '/');
+$includePaths[] = empty($installPath) ? $includePath : $installPath.'/'.$includePath;
+}
+}
+
+if (!$includePaths) {
+return;
+}
+
+$includePathsCode = '';
+foreach ($includePaths as $path) {
+$includePathsCode .= "    " . $this->getPathCode($filesystem, $basePath, $vendorPath, $path) . ",\n";
+}
+
+return <<<EOF
+<?php
+// include_paths.php @generated by Composer
+\$vendorDir = $vendorPathCode;
+\$baseDir = $appBaseDirCode;
+return array(
+$includePathsCode);
+EOF;
+}
+
+protected function getIncludeFilesFile(array $files, Filesystem $filesystem, $basePath, $vendorPath, $vendorPathCode, $appBaseDirCode)
+{
+$filesCode = '';
+foreach ($files as $fileIdentifier => $functionFile) {
+$filesCode .= '    ' . var_export($fileIdentifier, true) . ' => '
+. $this->getPathCode($filesystem, $basePath, $vendorPath, $functionFile) . ",\n";
+}
+
+if (!$filesCode) {
+return false;
+}
+
+return <<<EOF
+<?php
+// autoload_files.php @generated by Composer
+\$vendorDir = $vendorPathCode;
+\$baseDir = $appBaseDirCode;
+return array(
+$filesCode);
+EOF;
+}
+
+protected function getPathCode(Filesystem $filesystem, $basePath, $vendorPath, $path)
+{
+if (!$filesystem->isAbsolutePath($path)) {
+$path = $basePath . '/' . $path;
+}
+$path = $filesystem->normalizePath($path);
+
+$baseDir = '';
+if (strpos($path.'/', $vendorPath.'/') === 0) {
+$path = substr($path, strlen($vendorPath));
+$baseDir = '$vendorDir';
+
+if ($path !== false) {
+$baseDir .= " . ";
+}
+} else {
+$path = $filesystem->normalizePath($filesystem->findShortestPath($basePath, $path, true));
+if (!$filesystem->isAbsolutePath($path)) {
+$baseDir = '$baseDir . ';
+$path = '/' . $path;
+}
+}
+
+if (strpos($path, '.phar') !== false) {
+$baseDir = "'phar://' . " . $baseDir;
+}
+
+return $baseDir . (($path !== false) ? var_export($path, true) : "");
+}
+
+protected function getAutoloadFile($vendorPathToTargetDirCode, $suffix)
+{
+$lastChar = $vendorPathToTargetDirCode[strlen($vendorPathToTargetDirCode) - 1];
+if ("'" === $lastChar || '"' === $lastChar) {
+$vendorPathToTargetDirCode = substr($vendorPathToTargetDirCode, 0, -1).'/autoload_real.php'.$lastChar;
+} else {
+$vendorPathToTargetDirCode .= " . '/autoload_real.php'";
+}
+
+return <<<AUTOLOAD
+<?php
+// autoload.php @generated by Composer
+require_once $vendorPathToTargetDirCode;
+return ComposerAutoloaderInit$suffix::getLoader();
+AUTOLOAD;
+}
+
+protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000)
+{
+$file = <<<HEADER
+<?php
+// autoload_real.php @generated by Composer
+class ComposerAutoloaderInit$suffix
+{
+    private static \$loader;
+    public static function loadClassLoader(\$class)
+    {
+        if ('Composer\\Autoload\\ClassLoader' === \$class) {
+            require __DIR__ . '/ClassLoader.php';
+        }
+    }
+    /**
+     * @return \Composer\Autoload\ClassLoader
+     */
+    public static function getLoader()
+    {
+        if (null !== self::\$loader) {
+            return self::\$loader;
+        }
+        spl_autoload_register(array('ComposerAutoloaderInit$suffix', 'loadClassLoader'), true, $prependAutoloader);
+        self::\$loader = \$loader = new \\Composer\\Autoload\\ClassLoader();
+        spl_autoload_unregister(array('ComposerAutoloaderInit$suffix', 'loadClassLoader'));
+HEADER;
+
+if ($useIncludePath) {
+$file .= <<<'INCLUDE_PATH'
+        $includePaths = require __DIR__ . '/include_paths.php';
+        $includePaths[] = get_include_path();
+        set_include_path(implode(PATH_SEPARATOR, $includePaths));
+INCLUDE_PATH;
+}
+
+$file .= <<<STATIC_INIT
+        \$useStaticLoader = PHP_VERSION_ID >= $staticPhpVersion && !defined('HHVM_VERSION') && (!function_exists('zend_loader_file_encoded') || !zend_loader_file_encoded());
+        if (\$useStaticLoader) {
+            require_once __DIR__ . '/autoload_static.php';
+            call_user_func(\Composer\Autoload\ComposerStaticInit$suffix::getInitializer(\$loader));
+        } else {
+STATIC_INIT;
+
+if (!$this->classMapAuthoritative) {
+$file .= <<<'PSR04'
+            $map = require __DIR__ . '/autoload_namespaces.php';
+            foreach ($map as $namespace => $path) {
+                $loader->set($namespace, $path);
+            }
+            $map = require __DIR__ . '/autoload_psr4.php';
+            foreach ($map as $namespace => $path) {
+                $loader->setPsr4($namespace, $path);
+            }
+PSR04;
+}
+
+if ($useClassMap) {
+$file .= <<<'CLASSMAP'
+            $classMap = require __DIR__ . '/autoload_classmap.php';
+            if ($classMap) {
+                $loader->addClassMap($classMap);
+            }
+CLASSMAP;
+}
+
+$file .= "        }\n\n";
+
+if ($this->classMapAuthoritative) {
+$file .= <<<'CLASSMAPAUTHORITATIVE'
+        $loader->setClassMapAuthoritative(true);
+CLASSMAPAUTHORITATIVE;
+}
+
+if ($this->apcu) {
+$apcuPrefix = substr(base64_encode(md5(uniqid('', true), true)), 0, -3);
+$file .= <<<APCU
+        \$loader->setApcuPrefix('$apcuPrefix');
+APCU;
+}
+
+if ($useGlobalIncludePath) {
+$file .= <<<'INCLUDEPATH'
+        $loader->setUseIncludePath(true);
+INCLUDEPATH;
+}
+
+if ($targetDirLoader) {
+$file .= <<<REGISTER_TARGET_DIR_AUTOLOAD
+        spl_autoload_register(array('ComposerAutoloaderInit$suffix', 'autoload'), true, true);
+REGISTER_TARGET_DIR_AUTOLOAD;
+}
+
+$file .= <<<REGISTER_LOADER
+        \$loader->register($prependAutoloader);
+REGISTER_LOADER;
+
+if ($useIncludeFiles) {
+$file .= <<<INCLUDE_FILES
+        if (\$useStaticLoader) {
+            \$includeFiles = Composer\Autoload\ComposerStaticInit$suffix::\$files;
+        } else {
+            \$includeFiles = require __DIR__ . '/autoload_files.php';
+        }
+        foreach (\$includeFiles as \$fileIdentifier => \$file) {
+            composerRequire$suffix(\$fileIdentifier, \$file);
+        }
+INCLUDE_FILES;
+}
+
+$file .= <<<METHOD_FOOTER
+        return \$loader;
+    }
+METHOD_FOOTER;
+
+$file .= $targetDirLoader;
+
+if ($useIncludeFiles) {
+return $file . <<<FOOTER
+}
+function composerRequire$suffix(\$fileIdentifier, \$file)
+{
+    if (empty(\$GLOBALS['__composer_autoload_files'][\$fileIdentifier])) {
+        require \$file;
+        \$GLOBALS['__composer_autoload_files'][\$fileIdentifier] = true;
+    }
+}
+FOOTER;
+}
+
+return $file . <<<FOOTER
+}
+FOOTER;
+}
+
+protected function getStaticFile($suffix, $targetDir, $vendorPath, $basePath, &$staticPhpVersion)
+{
+$staticPhpVersion = 50600;
+
+$file = <<<HEADER
+<?php
+// autoload_static.php @generated by Composer
+namespace Composer\Autoload;
+class ComposerStaticInit$suffix
+{
+HEADER;
+
+$loader = new ClassLoader();
+
+$map = require $targetDir . '/autoload_namespaces.php';
+foreach ($map as $namespace => $path) {
+$loader->set($namespace, $path);
+}
+
+$map = require $targetDir . '/autoload_psr4.php';
+foreach ($map as $namespace => $path) {
+$loader->setPsr4($namespace, $path);
+}
+
+$classMap = require $targetDir . '/autoload_classmap.php';
+if ($classMap) {
+$loader->addClassMap($classMap);
+}
+
+$filesystem = new Filesystem();
+
+$vendorPathCode = ' => ' . $filesystem->findShortestPathCode(realpath($targetDir), $vendorPath, true, true) . " . '/";
+$vendorPharPathCode = ' => \'phar://\' . ' . $filesystem->findShortestPathCode(realpath($targetDir), $vendorPath, true, true) . " . '/";
+$appBaseDirCode = ' => ' . $filesystem->findShortestPathCode(realpath($targetDir), $basePath, true, true) . " . '/";
+$appBaseDirPharCode = ' => \'phar://\' . ' . $filesystem->findShortestPathCode(realpath($targetDir), $basePath, true, true) . " . '/";
+
+$absoluteVendorPathCode = ' => ' . substr(var_export(rtrim($vendorDir, '\\/') . '/', true), 0, -1);
+$absoluteVendorPharPathCode = ' => ' . substr(var_export(rtrim('phar://' . $vendorDir, '\\/') . '/', true), 0, -1);
+$absoluteAppBaseDirCode = ' => ' . substr(var_export(rtrim($baseDir, '\\/') . '/', true), 0, -1);
+$absoluteAppBaseDirPharCode = ' => ' . substr(var_export(rtrim('phar://' . $baseDir, '\\/') . '/', true), 0, -1);
+
+$initializer = '';
+$prefix = "\0Composer\Autoload\ClassLoader\0";
+$prefixLen = strlen($prefix);
+if (file_exists($targetDir . '/autoload_files.php')) {
+$maps = array('files' => require $targetDir . '/autoload_files.php');
+} else {
+$maps = array();
+}
+
+foreach ((array) $loader as $prop => $value) {
+if ($value && 0 === strpos($prop, $prefix)) {
+$maps[substr($prop, $prefixLen)] = $value;
+}
+}
+
+foreach ($maps as $prop => $value) {
+if (count($value) > 32767) {
+
+ 
+ $staticPhpVersion = 70000;
+}
+$value = strtr(
+var_export($value, true),
+array(
+$absoluteVendorPathCode => $vendorPathCode,
+$absoluteVendorPharPathCode => $vendorPharPathCode,
+$absoluteAppBaseDirCode => $appBaseDirCode,
+$absoluteAppBaseDirPharCode => $appBaseDirPharCode,
+)
+);
+$value = ltrim(preg_replace('/^ */m', '    $0$0', $value));
+
+$file .= sprintf("    public static $%s = %s;\n\n", $prop, $value);
+if ('files' !== $prop) {
+$initializer .= "            \$loader->$prop = ComposerStaticInit$suffix::\$$prop;\n";
+}
+}
+
+return $file . <<<INITIALIZER
+    public static function getInitializer(ClassLoader \$loader)
+    {
+        return \Closure::bind(function () use (\$loader) {
+$initializer
+        }, null, ClassLoader::class);
+    }
+}
+INITIALIZER;
+}
+
+protected function parseAutoloadsType(array $packageMap, $type, PackageInterface $mainPackage)
+{
+$autoloads = array();
+
+foreach ($packageMap as $item) {
+list($package, $installPath) = $item;
+
+$autoload = $package->getAutoload();
+if ($this->devMode && $package === $mainPackage) {
+$autoload = array_merge_recursive($autoload, $package->getDevAutoload());
+}
+
+
+ if (!isset($autoload[$type]) || !is_array($autoload[$type])) {
+continue;
+}
+if (null !== $package->getTargetDir() && $package !== $mainPackage) {
+$installPath = substr($installPath, 0, -strlen('/'.$package->getTargetDir()));
+}
+
+foreach ($autoload[$type] as $namespace => $paths) {
+foreach ((array) $paths as $path) {
+if (($type === 'files' || $type === 'classmap' || $type === 'exclude-from-classmap') && $package->getTargetDir() && !is_readable($installPath.'/'.$path)) {
+
+ if ($package === $mainPackage) {
+$targetDir = str_replace('\\<dirsep\\>', '[\\\\/]', preg_quote(str_replace(array('/', '\\'), '<dirsep>', $package->getTargetDir())));
+$path = ltrim(preg_replace('{^'.$targetDir.'}', '', ltrim($path, '\\/')), '\\/');
+} else {
+
+ $path = $package->getTargetDir() . '/' . $path;
+}
+}
+
+if ($type === 'exclude-from-classmap') {
+
+ $path = preg_replace('{/+}', '/', preg_quote(trim(strtr($path, '\\', '/'), '/')));
+
+
+ $path = str_replace('\\*\\*', '.+?', $path);
+$path = str_replace('\\*', '[^/]+?', $path);
+
+
+ $updir = null;
+$path = preg_replace_callback(
+'{^((?:(?:\\\\\\.){1,2}+/)+)}',
+function ($matches) use (&$updir) {
+if (isset($matches[1])) {
+
+ $updir = str_replace('\\.', '.', $matches[1]);
+}
+
+return '';
+},
+$path
+);
+if (empty($installPath)) {
+$installPath = strtr(getcwd(), '\\', '/');
+}
+
+$resolvedPath = realpath($installPath . '/' . $updir);
+$autoloads[] = preg_quote(strtr($resolvedPath, '\\', '/')) . '/' . $path . '($|/)';
+continue;
+}
+
+$relativePath = empty($installPath) ? (empty($path) ? '.' : $path) : $installPath.'/'.$path;
+
+if ($type === 'files') {
+$autoloads[$this->getFileIdentifier($package, $path)] = $relativePath;
+continue;
+} elseif ($type === 'classmap') {
+$autoloads[] = $relativePath;
+continue;
+}
+
+$autoloads[$namespace][] = $relativePath;
+}
+}
+}
+
+return $autoloads;
+}
+
+protected function getFileIdentifier(PackageInterface $package, $path)
+{
+return md5($package->getName() . ':' . $path);
+}
+
+
+
+
+
+
+
+
+protected function filterPackageMap(array $packageMap, PackageInterface $mainPackage)
+{
+$packages = array();
+$include = array();
+$replacedBy = array();
+
+foreach ($packageMap as $item) {
+$package = $item[0];
+$name = $package->getName();
+$packages[$name] = $package;
+foreach ($package->getReplaces() as $replace) {
+$replacedBy[$replace->getTarget()] = $name;
+}
+}
+
+$add = function (PackageInterface $package) use (&$add, $packages, &$include, $replacedBy) {
+foreach ($package->getRequires() as $link) {
+$target = $link->getTarget();
+if (isset($replacedBy[$target])) {
+$target = $replacedBy[$target];
+}
+if (!isset($include[$target])) {
+$include[$target] = true;
+if (isset($packages[$target])) {
+$add($packages[$target]);
+}
+}
+}
+};
+$add($mainPackage);
+
+return array_filter(
+$packageMap,
+function ($item) use ($include) {
+$package = $item[0];
+foreach ($package->getNames() as $name) {
+if (isset($include[$name])) {
+return true;
+}
+}
+
+return false;
+}
+);
+}
+
+
+
+
+
+
+
+
+
+protected function sortPackageMap(array $packageMap)
+{
+$packages = array();
+$paths = array();
+
+foreach ($packageMap as $item) {
+list($package, $path) = $item;
+$name = $package->getName();
+$packages[$name] = $package;
+$paths[$name] = $path;
+}
+
+$sortedPackages = PackageSorter::sortPackages($packages);
+
+$sortedPackageMap = array();
+
+foreach ($sortedPackages as $package) {
+$name = $package->getName();
+$sortedPackageMap[] = array($packages[$name], $paths[$name]);
+}
+
+return $sortedPackageMap;
+}
+
+
+
+
+
+
+
+protected function safeCopy($source, $target)
+{
+if (!file_exists($target) || !file_exists($source) || !$this->filesAreEqual($source, $target)) {
+$source = fopen($source, 'r');
+$target = fopen($target, 'w+');
+
+stream_copy_to_stream($source, $target);
+fclose($source);
+fclose($target);
+}
+}
+
+
+
+
+
+private function filesAreEqual($a, $b)
+{
+
+ if (filesize($a) !== filesize($b)) {
+return false;
+}
+
+
+ $ah = fopen($a, 'rb');
+$bh = fopen($b, 'rb');
+
+$result = true;
+while (!feof($ah)) {
+if (fread($ah, 8192) != fread($bh, 8192)) {
+$result = false;
+break;
+}
+}
+
+fclose($ah);
+fclose($bh);
+
+return $result;
+}
+}
+<?php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace Composer\Autoload;
+
+use Symfony\Component\Finder\Finder;
+use Composer\IO\IOInterface;
+use Composer\Util\Filesystem;
+
+
+
+
+
+
+
+class ClassMapGenerator
+{
+
+
+
+
+
+
+public static function dump($dirs, $file)
+{
+$maps = array();
+
+foreach ($dirs as $dir) {
+$maps = array_merge($maps, static::createMap($dir));
+}
+
+file_put_contents($file, sprintf('<?php return %s;', var_export($maps, true)));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+public static function createMap($path, $excluded = null, IOInterface $io = null, $namespace = null, $autoloadType = null, &$scannedFiles = array())
+{
+if (is_string($path)) {
+$basePath = $path;
+if (is_file($path)) {
+$path = array(new \SplFileInfo($path));
+} elseif (is_dir($path)) {
+$path = Finder::create()->files()->followLinks()->name('/\.(php|inc|hh)$/')->in($path);
+} else {
+throw new \RuntimeException(
+'Could not scan for classes inside "'.$path.
+'" which does not appear to be a file nor a folder'
+);
+}
+} elseif (null !== $autoloadType) {
+throw new \RuntimeException('Path must be a string when specifying an autoload type');
+}
+
+$map = array();
+$filesystem = new Filesystem();
+$cwd = realpath(getcwd());
+
+foreach ($path as $file) {
+$filePath = $file->getPathname();
+if (!in_array(pathinfo($filePath, PATHINFO_EXTENSION), array('php', 'inc', 'hh'))) {
+continue;
+}
+
+if (!$filesystem->isAbsolutePath($filePath)) {
+$filePath = $cwd . '/' . $filePath;
+$filePath = $filesystem->normalizePath($filePath);
+} else {
+$filePath = preg_replace('{[\\\\/]{2,}}', '/', $filePath);
+}
+
+$realPath = realpath($filePath);
+
+
+ 
+ if (isset($scannedFiles[$realPath])) {
+continue;
+}
+
+
+ if ($excluded && preg_match($excluded, strtr($realPath, '\\', '/'))) {
+continue;
+}
+
+ if ($excluded && preg_match($excluded, strtr($filePath, '\\', '/'))) {
+continue;
+}
+
+$classes = self::findClasses($filePath);
+if (null !== $autoloadType) {
+list($classes, $validClasses) = self::filterByNamespace($classes, $filePath, $namespace, $autoloadType, $basePath, $io);
+
+
+ if ($validClasses) {
+$scannedFiles[$realPath] = true;
+}
+} else {
+
+ $scannedFiles[$realPath] = true;
+}
+
+foreach ($classes as $class) {
+
+ 
+ if ( null !== $namespace && '' !== $namespace && 0 !== strpos($class, $namespace)) {
+continue;
+}
+
+if (!isset($map[$class])) {
+$map[$class] = $filePath;
+} elseif ($io && $map[$class] !== $filePath && !preg_match('{/(test|fixture|example|stub)s?/}i', strtr($map[$class].' '.$filePath, '\\', '/'))) {
+$io->writeError(
+'<warning>Warning: Ambiguous class resolution, "'.$class.'"'.
+' was found in both "'.$map[$class].'" and "'.$filePath.'", the first will be used.</warning>'
+);
+}
+}
+}
+
+return $map;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+private static function filterByNamespace($classes, $filePath, $baseNamespace, $namespaceType, $basePath, $io)
+{
+$validClasses = array();
+$rejectedClasses = array();
+
+$realSubPath = substr($filePath, strlen($basePath) + 1);
+$realSubPath = substr($realSubPath, 0, strrpos($realSubPath, '.'));
+
+foreach ($classes as $class) {
+
+ if ('' !== $baseNamespace && 0 !== strpos($class, $baseNamespace)) {
+continue;
+}
+
+ if ('psr-0' === $namespaceType) {
+$namespaceLength = strrpos($class, '\\');
+if (false !== $namespaceLength) {
+$namespace = substr($class, 0, $namespaceLength + 1);
+$className = substr($class, $namespaceLength + 1);
+$subPath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace)
+. str_replace('_', DIRECTORY_SEPARATOR, $className);
+}
+else {
+$subPath = str_replace('_', DIRECTORY_SEPARATOR, $class);
+}
+} elseif ('psr-4' === $namespaceType) {
+$subNamespace = ('' !== $baseNamespace) ? substr($class, strlen($baseNamespace)) : $class;
+$subPath = str_replace('\\', DIRECTORY_SEPARATOR, $subNamespace);
+} else {
+throw new \RuntimeException("namespaceType must be psr-0 or psr-4, $namespaceType given");
+}
+if ($subPath === $realSubPath) {
+$validClasses[] = $class;
+} else {
+$rejectedClasses[] = $class;
+}
+}
+
+ if (empty($validClasses)) {
+foreach ($rejectedClasses as $class) {
+trigger_error(
+"Class $class located in ".preg_replace('{^'.preg_quote(getcwd()).'}', '.', $filePath, 1)." does not comply with $namespaceType autoloading standard. It will not autoload anymore in Composer v2.0.",
+E_USER_DEPRECATED
+);
+}
+
+
+ 
+ }
+
+
+ 
+ return array($classes, $validClasses);
+}
+
+
+
+
+
+
+
+
+private static function findClasses($path)
+{
+$extraTypes = PHP_VERSION_ID < 50400 ? '' : '|trait';
+if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.3', '>=')) {
+$extraTypes .= '|enum';
+}
+
+
+ 
+ $contents = @php_strip_whitespace($path);
+if (!$contents) {
+if (!file_exists($path)) {
+$message = 'File at "%s" does not exist, check your classmap definitions';
+} elseif (!is_readable($path)) {
+$message = 'File at "%s" is not readable, check its permissions';
+} elseif ('' === trim(file_get_contents($path))) {
+
+ return array();
+} else {
+$message = 'File at "%s" could not be parsed as PHP, it may be binary or corrupted';
+}
+$error = error_get_last();
+if (isset($error['message'])) {
+$message .= PHP_EOL . 'The following message may be helpful:' . PHP_EOL . $error['message'];
+}
+throw new \RuntimeException(sprintf($message, $path));
+}
+
+
+ if (!preg_match('{\b(?:class|interface'.$extraTypes.')\s}i', $contents)) {
+return array();
+}
+
+
+ $contents = preg_replace('{<<<[ \t]*([\'"]?)(\w+)\\1(?:\r\n|\n|\r)(?:.*?)(?:\r\n|\n|\r)(?:\s*)\\2(?=\s+|[;,.)])}s', 'null', $contents);
+
+ $contents = preg_replace('{"[^"\\\\]*+(\\\\.[^"\\\\]*+)*+"|\'[^\'\\\\]*+(\\\\.[^\'\\\\]*+)*+\'}s', 'null', $contents);
+
+ if (substr($contents, 0, 2) !== '<?') {
+$contents = preg_replace('{^.+?<\?}s', '<?', $contents, 1, $replacements);
+if ($replacements === 0) {
+return array();
+}
+}
+
+ $contents = preg_replace('{\?>(?:[^<]++|<(?!\?))*+<\?}s', '?><?', $contents);
+
+ $pos = strrpos($contents, '?>');
+if (false !== $pos && false === strpos(substr($contents, $pos), '<?')) {
+$contents = substr($contents, 0, $pos);
+}
+
+ if (preg_match('{(<\?)(?!(php|hh))}i', $contents)) {
+$contents = preg_replace('{//.* | /\*(?:[^*]++|\*(?!/))*\*/}x', '', $contents);
+}
+
+preg_match_all('{
+            (?:
+                 \b(?<![\$:>])(?P<type>class|interface'.$extraTypes.') \s++ (?P<name>[a-zA-Z_\x7f-\xff:][a-zA-Z0-9_\x7f-\xff:\-]*+)
+               | \b(?<![\$:>])(?P<ns>namespace) (?P<nsname>\s++[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+(?:\s*+\\\\\s*+[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+)*+)? \s*+ [\{;]
+            )
+        }ix', $contents, $matches);
+
+$classes = array();
+$namespace = '';
+
+for ($i = 0, $len = count($matches['type']); $i < $len; $i++) {
+if (!empty($matches['ns'][$i])) {
+$namespace = str_replace(array(' ', "\t", "\r", "\n"), '', $matches['nsname'][$i]) . '\\';
+} else {
+$name = $matches['name'][$i];
+
+ if ($name === 'extends' || $name === 'implements') {
+continue;
+}
+if ($name[0] === ':') {
+
+ $name = 'xhp'.substr(str_replace(array('-', ':'), array('_', '__'), $name), 1);
+} elseif ($matches['type'][$i] === 'enum') {
+
+ 
+ 
+ 
+ $name = rtrim($name, ':');
+}
+$classes[] = ltrim($namespace . $name, '\\');
+}
+}
+
+return $classes;
+}
+}
+<?php
+
+
+
+
+
+
+
+
+
+
+
+namespace Composer;
+
+use Composer\IO\IOInterface;
+use Composer\Util\Filesystem;
+use Composer\Util\Silencer;
+use Symfony\Component\Finder\Finder;
+
+
+
+
+
+
+class Cache
+{
+private static $cacheCollected = false;
+private $io;
+private $root;
+private $enabled = true;
+private $allowList;
+private $filesystem;
+
+
+
+
+
+
+
+public function __construct(IOInterface $io, $cacheDir, $allowList = 'a-z0-9.', Filesystem $filesystem = null)
+{
+$this->io = $io;
+$this->root = rtrim($cacheDir, '/\\') . '/';
+$this->allowList = $allowList;
+$this->filesystem = $filesystem ?: new Filesystem();
+
+if (!self::isUsable($cacheDir)) {
+$this->enabled = false;
+
+return;
+}
+
+if (
+(!is_dir($this->root) && !Silencer::call('mkdir', $this->root, 0777, true))
+|| !is_writable($this->root)
+) {
+$this->io->writeError('<warning>Cannot create cache directory ' . $this->root . ', or directory is not writable. Proceeding without cache</warning>');
+$this->enabled = false;
+}
+}
+
+public static function isUsable($path)
+{
+return !preg_match('{(^|[\\\\/])(\$null|nul|NUL|/dev/null)([\\\\/]|$)}', $path);
+}
+
+public function isEnabled()
+{
+return $this->enabled;
+}
+
+public function getRoot()
+{
+return $this->root;
+}
+
+public function read($file)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+if (file_exists($this->root . $file)) {
+$this->io->writeError('Reading '.$this->root . $file.' from cache', true, IOInterface::DEBUG);
+
+return file_get_contents($this->root . $file);
+}
+}
+
+return false;
+}
+
+public function write($file, $contents)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+
+$this->io->writeError('Writing '.$this->root . $file.' into cache', true, IOInterface::DEBUG);
+
+try {
+return file_put_contents($this->root . $file, $contents);
+} catch (\ErrorException $e) {
+$this->io->writeError('<warning>Failed to write into cache: '.$e->getMessage().'</warning>', true, IOInterface::DEBUG);
+if (preg_match('{^file_put_contents\(\): Only ([0-9]+) of ([0-9]+) bytes written}', $e->getMessage(), $m)) {
+
+ unlink($this->root . $file);
+
+$message = sprintf(
+'<warning>Writing %1$s into cache failed after %2$u of %3$u bytes written, only %4$u bytes of free space available</warning>',
+$this->root . $file,
+$m[1],
+$m[2],
+@disk_free_space($this->root . dirname($file))
+);
+
+$this->io->writeError($message);
+
+return false;
+}
+
+throw $e;
+}
+}
+
+return false;
+}
+
+
+
+
+public function copyFrom($file, $source)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+$this->filesystem->ensureDirectoryExists(dirname($this->root . $file));
+
+if (!file_exists($source)) {
+$this->io->writeError('<error>'.$source.' does not exist, can not write into cache</error>');
+} elseif ($this->io->isDebug()) {
+$this->io->writeError('Writing '.$this->root . $file.' into cache from '.$source);
+}
+
+return copy($source, $this->root . $file);
+}
+
+return false;
+}
+
+
+
+
+public function copyTo($file, $target)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+if (file_exists($this->root . $file)) {
+try {
+touch($this->root . $file, filemtime($this->root . $file), time());
+} catch (\ErrorException $e) {
+
+ 
+ Silencer::call('touch', $this->root . $file);
+}
+
+$this->io->writeError('Reading '.$this->root . $file.' from cache', true, IOInterface::DEBUG);
+
+return copy($this->root . $file, $target);
+}
+}
+
+return false;
+}
+
+public function gcIsNecessary()
+{
+return (!self::$cacheCollected && !mt_rand(0, 50));
+}
+
+public function remove($file)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+if (file_exists($this->root . $file)) {
+return $this->filesystem->unlink($this->root . $file);
+}
+}
+
+return false;
+}
+
+public function clear()
+{
+if ($this->enabled) {
+$this->filesystem->emptyDirectory($this->root);
+return true;
+}
+
+return false;
+}
+
+public function gc($ttl, $maxSize)
+{
+if ($this->enabled) {
+$expire = new \DateTime();
+$expire->modify('-'.$ttl.' seconds');
+
+$finder = $this->getFinder()->date('until '.$expire->format('Y-m-d H:i:s'));
+foreach ($finder as $file) {
+$this->filesystem->unlink($file->getPathname());
+}
+
+$totalSize = $this->filesystem->size($this->root);
+if ($totalSize > $maxSize) {
+$iterator = $this->getFinder()->sortByAccessedTime()->getIterator();
+while ($totalSize > $maxSize && $iterator->valid()) {
+$filepath = $iterator->current()->getPathname();
+$totalSize -= $this->filesystem->size($filepath);
+$this->filesystem->unlink($filepath);
+$iterator->next();
+}
+}
+
+self::$cacheCollected = true;
+
+return true;
+}
+
+return false;
+}
+
+public function sha1($file)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+if (file_exists($this->root . $file)) {
+return sha1_file($this->root . $file);
+}
+}
+
+return false;
+}
+
+public function sha256($file)
+{
+if ($this->enabled) {
+$file = preg_replace('{[^'.$this->allowList.']}i', '-', $file);
+if (file_exists($this->root . $file)) {
+return hash_file('sha256', $this->root . $file);
+}
+}
+
+return false;
+}
+
+protected function getFinder()
+{
+return Finder::create()->in($this->root)->files();
+}
+}
+<?php
+
+
+
+
+
+
+
+
+
+
+
+namespace Composer\Command;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+
+
+
+class AboutCommand extends BaseCommand
+{
+protected function configure()
+{
+$this
+->setName('about')
+->setDescription('Shows the short information about Composer.')
+->setHelp(
+<<<EOT
+<info>php composer.phar about</info>
+EOT
+)
+;
+}
+
+protected function execute(InputInterface $input, OutputInterface $output)
+{
+$this->getIO()->write(
+<<<EOT
+<info>Composer - Dependency Manager for PHP</info>
+<comment>Composer is a dependency manager tracking local dependencies of your projects and libraries.
+See https://getcomposer.org/ for more information.</comment>
+EOT
+);
+
+return 0;
+}
+}
+<?php
+
+
+
+
+
+
+
+
+
+
+
+namespace Composer\Command;
+
+use Composer\Factory;
+use Composer\IO\IOInterface;
+use Composer\Config;
+use Composer\Composer;
+use Composer\Repository\CompositeRepository;
+use Composer\Repository\RepositoryFactory;
+use Composer\Script\ScriptEvents;
+use Composer\Plugin\CommandEvent;
+use Composer\Plugin\PluginEvents;
+use Composer\Util\Filesystem;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+
+
+
+
+
+class ArchiveCommand extends BaseCommand
+{
+protected function configure()
+{
+$this
+->setName('archive')
+->setDescription('Creates an archive of this composer package.')
+->setDefinition(array(
+new InputArgument('package', InputArgument::OPTIONAL, 'The package to archive instead of the current project'),
+new InputArgument('version', InputArgument::OPTIONAL, 'A version constraint to find the package to archive'),
+new InputOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format of the resulting archive: tar or zip'),
+new InputOption('dir', null, InputOption::VALUE_REQUIRED, 'Write the archive to this directory'),
+new InputOption('file', null, InputOption::VALUE_REQUIRED, 'Write the archive with the given file name.'
+.' Note that the format will be appended.'),
+new InputOption('ignore-filters', false, InputOption::VALUE_NONE, 'Ignore filters when saving package'),
+))
+->setHelp(
+<<<EOT
+The <info>archive</info> command creates an archive of the specified format
+containing the files and directories of the Composer project or the specified
+package in the specified version and writes it to the specified directory.
+<info>php composer.phar archive [--format=zip] [--dir=/foo] [package [version]]</info>
+Read more at https://getcomposer.org/doc/03-cli.md#archive
+EOT
+)
+;
+}
+
+protected function execute(InputInterface $input, OutputInterface $output)
+{
+$composer = $this->getComposer(false);
+$config = null;
+
+if ($composer) {
+$config = $composer->getConfig();
+$commandEvent = new CommandEvent(PluginEvents::COMMAND, 'archive', $input, $output);
+$eventDispatcher = $composer->getEventDispatcher();
+$eventDispatcher->dispatch($commandEvent->getName(), $commandEvent);
+$eventDispatcher->dispatchScript(ScriptEvents::PRE_ARCHIVE_CMD);
+}
+
+if (!$config) {
+$config = Factory::createConfig();
+}
+
+if (null === $input->getOption('format')) {
+$input->setOption('format', $config->get('archive-format'));
+}
+if (null === $input->getOption('dir')) {
+$input->setOption('dir', $config->get('archive-dir'));
+}
+
+$returnCode = $this->archive(
+$this->getIO(),
+$config,
+$input->getArgument('package'),
+$input->getArgument('version'),
+$input->getOption('format'),
+$input->getOption('dir'),
+$input->getOption('file'),
+$input->getOption('ignore-filters'),
+$composer
+);
+
+if (0 === $returnCode && $composer) {
+$composer->getEventDispatcher()->dispatchScript(ScriptEvents::POST_ARCHIVE_CMD);
+}
+
+return $returnCode;
+}
+
+protected function archive(IOInterface $io, Config $config, $packageName = null, $version = null, $format = 'tar', $dest = '.', $fileName = null, $ignoreFilters = false, Composer $composer = null)
+{
+if ($composer) {
+$archiveManager = $composer->getArchiveManager();
+} else {
+$factory = new Factory;
+$downloadManager = $factory->createDownloadManager($io, $config);
+$archiveManager = $factory->createArchiveManager($config, $downloadManager);
+}
+
+if ($packageName) {
+$package = $this->selectPackage($io, $packageName, $version);
+
+if (!$package) {
+return 1;
+}
+} else {
+$package = $this->getComposer()->getPackage();
+}
+
+$io->writeError('<info>Creating the archive into "'.$dest.'".</info>');
+$packagePath = $archiveManager->archive($package, $format, $dest, $fileName, $ignoreFilters);
+$fs = new Filesystem;
+$shortPath = $fs->findShortestPath(getcwd(), $packagePath, true);
+
+$io->writeError('Created: ', false);
+$io->write(strlen($shortPath) < strlen($packagePath) ? $shortPath : $packagePath);
+
+ret
