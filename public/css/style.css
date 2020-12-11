@@ -1,0 +1,78 @@
+body{
+  margin:0;
+  padding:0;
+  background-color:#d7cec2;
+}
+
+
+
+/* Page Login */
+
+#errorlogin
+{
+  color:white;
+  text-align:center;
+}
+#login{
+  background-color:#d7cec2;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+#loginBox{
+  margin-top:200px;
+}
+
+#loginBox h3{
+  text-align:center;
+  text-transform:uppercase;
+  color:#999998;
+  margin-bottom:40px;
+  font-size:30px;
+  font-family: typeka,sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.userBox{
+  padding:5px 20px;
+  border-radius:20px;
+  background-color:white;
+  margin:20px;
+  color:#999998;
+  cursor:pointer;
+  transition: all 0.3s ease 0s;
+  transform: scale(1);
+}
+
+.userBox:hover{
+  transform: scale(1.15);
+}
+.userBox input{
+  border:none;
+}
+
+.buttons{
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  padding:5px 10px;
+}
+
+.buttonSignUp{ 
+  background-color:#7bb2ad;
+  border-radius:20px;
+  padding:10px;
+  margin:10px;
+  color:white;
+}
+
+.buttonReturn{
+  padding:10px;
+  color:#7bb2ad;
+  margin:10px;
+}
