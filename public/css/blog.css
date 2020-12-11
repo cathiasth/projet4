@@ -1,0 +1,104 @@
+/* Page Blog */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/14/10 
+  modify by : Cathia Saint-Hélène
+  date : 2020/14/10 */
+
+#sectionBlog
+{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  width:100%;
+}
+
+#sectionBlog h3
+{
+  color:white;
+  text-align:center;
+  font-size: 25px;
+}
+
+.showReponse
+{
+  color:#d7cec2;
+  font-size:20px;
+}
+.postBox
+{
+  margin:30px;
+  border-radius:20px;
+  padding:20px;
+  text-align:justify;
+  color:white;
+  background-color: #999998;
+}
+
+#sectionBlog h3
+{
+  margin:60px;
+  font-size:40px;
+}
+
+.postBox a, .seeMore a
+{
+  text-decoration: none;
+  color:white;
+  background-color:#7bb2ad;
+  padding:10px 20px;
+  border-radius:20px;
+}
+
+.postContent
+{
+  overflow:hidden;
+  height:190px;
+}
+
+.postDate, .postTemplate .postDate
+{
+  text-align:right;
+}
+
+.postTemplate .postTitle
+{
+  text-align:center;
+  color:white;
+  font-size:40px;
+}
+
+.postBody
+{
+  background-color:#999998;
+}
+
+.postTemplate, .commentTemplate
+{
+  margin:40px;
+}
+
+.postTemplate p
+{
+  text-align:justify;
+}
+
+.postTemplate a
+{
+  text-decoration:none;
+  color:white;
+  background-color:#7bb2ad;
+  padding:10px 20px;
+  border-radius:20px;
+}
+
+.seeMore
+{
+  transition: all 0.3s ease 0s;
+  transform: scale(1);
+}
+
+.seeMore:hover
+{
+  transform: scale(1.2);
+}
