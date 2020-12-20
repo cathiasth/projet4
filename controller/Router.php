@@ -24,6 +24,20 @@ class Router
                     $this->frontController->showPost($_GET['postId']);
                 }
             }
+            elseif($_GET['route'] === 'newPost'){
+                    if(isset($_SESSION["email"])){
+                        $this->frontController->newPost();
+                    }else{
+                        header('Location:/home/');
+                    }
+                }
+                elseif($_GET['route'] === 'addPost'){
+                    if(isset($_SESSION["email"])){
+                        $this->backController->addPost($_POST['title'], $_POST['content'], $_POST['postId']);
+                    }else{
+                        header('Location:/home/');
+                    }
+                }
             else{
                 $this->frontController->getPosts();
             }
