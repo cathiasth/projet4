@@ -3,6 +3,13 @@
         <h3>Liste des Chapitres</h3>
         
         <?php
+            if ($_SESSION['email']) {
+        ?>
+  <p><a href="/new-post/" id="newPost">Nouvel Chapitre</a></p>
+        <?php
+           } 
+        ?>
+        <?php
             while($post = $posts->fetch())
             {
         ?>
@@ -12,7 +19,7 @@
             
             <p class="postContent"><?= $post['content'];?></p><span>...</span>
             
-            <a href="../public/index.php?route=post&postId=<?= $post['id'];?>" class="seeMore">Voir plus</a>
+            <a href="/post/<?= $post['id'];?>/" class="seeMore">Voir plus</a>
         
         </div>
         <br>
