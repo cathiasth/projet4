@@ -31,14 +31,21 @@ class Router
                         header('Location:/home/');
                     }
                 }
-                elseif($_GET['route'] === 'addPost'){
+            elseif($_GET['route'] === 'addPost'){
                     if(isset($_SESSION["email"])){
                         $this->backController->addPost($_POST['title'], $_POST['content'], $_POST['postId']);
                     }else{
                         header('Location:/home/');
                     }
                 }
-            else{
+            
+             elseif($_GET['route'] === 'addComment'){
+                    $this->frontController->addComment($_POST['author'], $_POST['comment_author'], $_GET['postId']);
+                }
+             elseif($_GET['route'] === 'flagComment'){
+                    $this->frontController->flagComment($_GET['id'], $_GET['postId']);
+                }
+             else{
                 $this->frontController->getPosts();
             }
         }
