@@ -38,12 +38,14 @@ class Router
                         header('Location:/home/');
                     }
                 }
-            
              elseif($_GET['route'] === 'addComment'){
                     $this->frontController->addComment($_POST['author'], $_POST['comment_author'], $_GET['postId']);
                 }
              elseif($_GET['route'] === 'flagComment'){
                     $this->frontController->flagComment($_GET['id'], $_GET['postId']);
+                }
+             elseif($_GET['route'] === 'login'){
+                    $this->frontController->login($_GET['email']);
                 }
              else{
                 $this->frontController->getPosts();
