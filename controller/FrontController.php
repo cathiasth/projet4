@@ -25,6 +25,24 @@ class FrontController
     {
       require '../view/new_post.php';
     }
-    //Affiche le contenu d'un article sélectionné
     
+    //Affiche le contenu d'un article sélectionné
+    public function showPost($postId)
+    {
+          $post = $this->postManager->getPost($postId);
+          $comments =$this->commentManager->getComments($postId);
+          require '../view/postView.php';
+    }
+    
+    public function addComment($author, $commentAuthor, $postId)
+    {
+          $this->commentManager->addComment($author, $commentAuthor, $postId);
+          header('Location: /post/'.$postId.'/');
+    }
+    
+    public function flagComment($id, $postId)
+    {
+          $this->commentManager->flagComment($id);
+          header('Location: /post/'.$postId.'/');
+    }
 }
