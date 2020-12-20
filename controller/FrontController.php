@@ -45,4 +45,10 @@ class FrontController
           $this->commentManager->flagComment($id);
           header('Location: /post/'.$postId.'/');
     }
+    
+    public function login($email)
+    {
+        $this->adminManager->login($email);
+        require '../view/login.php';
+    }
 }
