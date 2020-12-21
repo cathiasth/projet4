@@ -25,7 +25,34 @@ class CommentManager
         $request = $db->prepare('UPDATE comments SET flag = ? WHERE id = ?');
         $request->execute(array(1, $id));
     }
+    public function deleteComment($id)
+    {
+        $db = $this->dbConnect();
+        $request = $db->prepare('DELETE FROM comments WHERE id = ?');
+        $request->execute(array($id));
+    }
     
+    public function deleteComments($postId)
+    {
+        $db = $this->dbConnect();
+        $request = $db->prepare('DELETE FROM comments WHERE postId = ?');
+        $request->execute(array($postId));
+    }
+  
+    public function getFlags()
+    { 
+        $db = $this->dbConnect();
+        $flags = $db->prepare('SELECT id, author, comment_author, comment_date, flag, post_id FROM comments WHERE flag = ? ORDER BY comment_date DESC');
+        $flags->execute(array(1));
+        return $flags;
+    }
+  
+    public function flagOffComment($id)
+    {
+        $db = $this->dbConnect();
+        $request = $db->prepare('UPDATE comments SET flag = ? WHERE id = ?');
+        $request->execute(array(0, $id));
+    }
     protected function dbConnect()
     {
         $db = new \PDO('mysql:host='.HOST.';dbname='.DB_NAME.';charset='.CHARSET.';', DB_USER, DB_PASS);
