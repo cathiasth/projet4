@@ -1,0 +1,24 @@
+/* Section Mentions */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/05/12 
+  modify by : Cathia Saint-Hélène
+  date : 2020/05/12 */
+
+#sectionMention{
+  margin:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+#sectionMention h3{
+  text-align:center;
+  margin:30px;
+  color:white;
+}
+
+#sectinMention p{
+  text-align:justify;
+}
