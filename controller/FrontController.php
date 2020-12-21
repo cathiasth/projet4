@@ -34,6 +34,12 @@ class FrontController
           require '../view/postView.php';
     }
     
+    public function updatePost($title,$content,$postId)
+    {
+          $this->postManager->updatePost($title, $content,$postId);
+          header('Location: /post/'.$postId.'/');
+    }
+    
     public function addComment($author, $commentAuthor, $postId)
     {
           $this->commentManager->addComment($author, $commentAuthor, $postId);
@@ -50,5 +56,11 @@ class FrontController
     {
         $this->adminManager->login($email);
         require '../view/login.php';
+    }
+    
+    public function profil()
+    {
+        $comments = $this->commentManager->getFlags();
+        require '../view/profil.php';
     }
 }
