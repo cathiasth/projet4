@@ -1,0 +1,16 @@
+/* Page About */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/06/11
+  modify by : Cathia Saint-Hélène
+  date : 2020/06/11 */
+
+#sectionbiographie .container h1
+{
+  color:white;
+  margin:50px;
+}
+.biographie-text p
+{
+  text-align:justify;
+}
