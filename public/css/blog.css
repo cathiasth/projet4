@@ -3,7 +3,7 @@
 /* create by : Cathia Saint-Hélène
   date : 2020/14/10 
   modify by : Cathia Saint-Hélène
-  date : 2020/14/10 */
+  date : 2020/16/11 */
 
 #sectionBlog
 {
@@ -101,4 +101,63 @@
 .seeMore:hover
 {
   transform: scale(1.2);
+}
+
+#newPost
+{
+  text-align:left;
+  color:white;
+  background-color:#999998;
+  padding:10px 20px;
+  border-radius:20px;
+  text-decoration:none;
+  transition: all 0.3s ease 0s;
+  transform: scale(1);
+}
+
+#newPost:hover
+{
+  transform: scale(1.2);
+}
+
+#newPostBox
+{
+  margin:30px;
+}
+
+#newPostBox h3
+{
+  margin:20px;
+  color:white;
+  text-align:center;
+}
+
+#newTitleBox
+{
+  display:flex;
+  flex-direction:row;
+  background-color:#999998;
+  color:white;
+  border-radius:20px;
+}
+
+#newTitleBox label, #newTitleBox input
+{
+  margin:10px 20px;
+}
+
+.editButton , .deleteButton
+{
+  text-decoration:none;
+  color:white;
+  padding:10px 20px;
+  margin:10px 20px;
+  border-radius: 20px;
+}
+
+.setting_comment
+{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
