@@ -1,0 +1,38 @@
+
+
+DirectoryIndex /public/index.php
+
+# Le serveur doit suivre les liens symboliques :
+Options +FollowSymlinks
+
+# Activation du module de réécriture d'URL :
+RewriteEngine on
+RewriteBase /
+
+#--------------------------------------------------
+# Règles de réécriture d'URL : SEULEMENT POUR L'HEBERGEUR
+#--------------------------------------------------
+
+RewriteRule ^home/$  /public/index.php [L]
+RewriteRule ^about/$ /public/index.php?route=about [L]
+RewriteRule ^contact/$ /public/index.php?route=contact [L]
+RewriteRule ^login/$ /public/index.php?route=login [L]
+RewriteRule ^profil/$ /public/index.php?route=profil [L]
+RewriteRule ^logout/$  /public/index.php?route=logout [L]
+RewriteRule ^new-post/$ /public/index.php?route=newPost [L]
+RewriteRule ^add-post/$ /public/index.php?route=addPost [L]
+RewriteRule ^mentions-propres-au-site/$ /public/index.php?route=mentionsPropresAuSite [L]
+RewriteRule ^mentions-relatives-utilisations-cookies/$ /public/index.php?route=mentionsRelativesUtilisationsCookies [L]
+RewriteRule ^mentions-relatives-utilisations-donnees-personnelles/$ /public/index.php?route=mentionsRelativesUtilisationsDonneesPersonnelles [L]
+
+RewriteRule ^post/([0-9]+)/$        /public/index.php?route=post&postId=$1
+RewriteRule ^deletePost/([0-9]+)/$ /public/index.php?route=deletePost&postId=$1 
+RewriteRule ^updatePost/([0-9]+)/$ /public/index.php?route=updatePost&postId=$1
+RewriteRule ^editPost/([0-9]+)/$  /public/index.php?route=editPost&postId=$1
+
+RewriteRule ^addComment/([0-9]+)/$  /public/index.php?route=addComment&postId=$1
+RewriteRule ^flagComment/([0-9]+)/$ /public/index.php?route=flagComment&id=$1
+RewriteRule ^flagOffComment/([0-9]+)/$ /public/index.php?route=flagOffComment&id=$1
+RewriteRule ^deleteComment/([0-9]+)/([0-9]+)/$ /public/index.php?route=deleteComment&postId=$1&id=$2
+
+
