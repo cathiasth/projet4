@@ -1,0 +1,63 @@
+/* Page Contact */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/15/10 
+  modify by : Cathia Saint-Hélène
+  date : 2020/15/10 */
+
+#sectioncontact p, #sectionContact h1
+{
+  color:white;
+  text-align:center;
+  margin:30px;
+}
+.contactBoxAll{
+  margin:30px;
+  width:100%;
+  
+}
+ #contact-form
+{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.contactBox, .subjectBox, .messageBox{
+  padding:5px 20px;
+  border-radius:20px;
+  background-color:white;
+  margin:20px;
+  color:#999998;
+  cursor:pointer;
+  width:80%;
+}
+
+.contactBox input, .subjectBox input, .messageBox input
+{
+  border:none;
+  width:80%;
+}
+
+
+#buttonSendContact
+{
+  background-color:#7bb2ad;
+  border-radius:20px;
+  padding:5px 10px;
+  margin:10px;
+  color:white;
+  text-decoration:none;
+  border:none;
+}
+
+@media (max-width:600px){
+  #sectionContact p
+  {
+     margin:10px;
+  }
+  
+  .contactBoxAll{
+    width:80%;
+  }
+}
