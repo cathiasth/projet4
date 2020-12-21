@@ -1,0 +1,36 @@
+/* Section Editor */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/16/10 
+  modify by : Cathia Saint-Hélène
+  date : 2020/05/12 */
+
+#editorBox
+{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+}
+
+#sectionEditor h2
+{
+  color:white;
+  text-align:center;
+  margin:25px;
+}
+
+#sectionEditor form
+{
+  width:80%;
+}
+
+#submit{
+  background-color:#7bb2ad;
+  border-radius:20px;
+  padding:5px 10px;
+  margin:10px;
+  color:white;
+  text-decoration:none;
+}
