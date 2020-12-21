@@ -1,0 +1,48 @@
+/* Page Profil */
+
+/* create by : Cathia Saint-Hélène
+  date : 2020/05/12
+  modify by : Cathia Saint-Hélène
+  date : 2020/05/12 */
+  
+#sectionProfil
+{
+  margin:20px 20px 250px 20px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+#sectionProfil h1
+{
+  color:#7bb2ad;
+  margin:50px;
+}
+
+#sectionProfil h2
+{
+  color:white;
+  margin:30px;
+}
+
+table
+{
+  width:100%;
+}
+
+table a
+{
+  text-decoration:none;
+  color:white;
+}
+
+table a:hover
+{
+  background-color:#7bb2ad;
+  border-radius:45px;
+  padding:5px 10px;
+  color:white;
+  text-decoration:none;
+}
