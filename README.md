@@ -26,9 +26,9 @@ Vous développerez en PHP sans utiliser de framework pour vous familiariser avec
 
 Environnement
 
-PHP 7.3
-Architecture MVC
-Programmation Orientée Objet
-Bootstrap 4.5
-MySQL
-API TinyMCE
+- PHP 7.3
+- Architecture MVC
+- Programmation Orientée Objet
+- Bootstrap 4.5
+- MySQL
+- API TinyMCE
